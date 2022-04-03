@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dialogs {
+  width: 30%;
+}
+
+.dialogItem {
+  display: block;
+  color: black;
+  height: 100px;
+  padding: 10px;
+  border-bottom: 1px solid lightblue;
+}
+
+.dialogItem:last-child {
+  border-bottom: none;
+}
+
+.dialogItem:hover {
+  background-color: lightblue;
+}
+
+.messages {
+  width: 70%;
+  padding: 20px;
+  background-color: rgb(217, 233, 255);
+}
+
+.messageItem {
+  background-color: white;
+  border: 1px solid gold;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.newMessage {
+  margin-top: 30px;
+  display: block;
+  width: 100%;
+  resize: none;
+  padding: 5px;
+  background-color: lightgrey;
+  border: 1px solid lightgrey;
+}
+
+.newMessage:focus {
+  outline: none;
+  background-color: white;
+}
+
+.sendMessage {
+  margin-top: 10px;
+  float: right;
+  padding: 8px 15px;
+  border: 1px solid lightblue;
+  background-color: white;
+  outline: none;
+}
+
+.sendMessage:hover,
+.sendMessage:active {
+  background-color: lightblue;
+  outline: none;
+}

@@ -1,0 +1,10 @@
+.user {
+  display: flex;
+  gap: 15px;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
