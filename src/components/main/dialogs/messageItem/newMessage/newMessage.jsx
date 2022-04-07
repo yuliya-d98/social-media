@@ -5,7 +5,7 @@ import s from '../../dialogs.module.css';
 
 const NewMessage = (props) => {
 
-    let newMessageText = props.newMessageText;
+    const newMessageText = props.newMessageText;
     
     const onNewMessageChange = (event) => {
         const text = event.target.value;
