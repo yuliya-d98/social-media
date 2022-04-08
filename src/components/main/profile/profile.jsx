@@ -8,8 +8,7 @@ const Profile = (props) => {
         <main className={s.content}>
             <div className={s.parallax}></div>
             <User />
-            <PostsContainer store={props.store} />
-            {/* <PostsContainer postsData={props.profilePage.postsData} newPostText={props.profilePage.newPostText} dispatch={props.dispatch} /> */}
+            <PostsContainer />
         </main>
     )
 }
