@@ -18,17 +18,16 @@ const profileReducer = (state = initialState, action) => {
         username: "Yuliya",
         message: state.newPostText,
       };
-      state.postsData.push(newPost);
-      state.newPostText = "";
-      break;
+      return {
+        ...state,
+        postsData: [newPost, ...state.postsData],
+        newPostText: "",
+      };
     case UPDATE_NEW_POST_TEXT:
-      state.newPostText = action.text;
-      break;
+      return { ...state, newPostText: action.text };
     default:
-      break;
+      return state;
   }
-
-  return state;
 };
 
 export default profileReducer;
