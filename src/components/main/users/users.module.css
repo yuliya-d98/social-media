@@ -1,0 +1,63 @@
+.user {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.userImgAndFollow {
+  max-width: 150px;
+}
+
+.image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: cadetblue;
+}
+
+.followButton {
+  text-align: center;
+  color: white;
+  background-color: aqua;
+  margin-top: 10px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.userInfo {
+  min-height: 100%;
+  width: calc(100% - 90px);
+  border: 1px solid aqua;
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+
+.username {
+  display: inline-block;
+  font-weight: 700;
+}
+
+.city {
+  display: inline-block;
+  margin-left: 10px;
+  color: lightslategrey;
+}
+
+.text {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.showMoreBtn {
+  font-weight: 700;
+  padding: 10px 20px;
+  margin: 50px auto;
+  background-color: cadetblue;
+  color: white;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.showMoreBtn:hover {
+  background-color: lightseagreen;
+}
