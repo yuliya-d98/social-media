@@ -9,6 +9,7 @@
 }
 
 .image {
+  display: block;
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -60,4 +61,22 @@
 
 .showMoreBtn:hover {
   background-color: lightseagreen;
+}
+
+.pagination {
+  margin: 20px 0 40px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.page {
+  display: inline-block;
+  border: 1px solid lightblue;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.page:hover,
+.active {
+  background-color: lightblue;
 }

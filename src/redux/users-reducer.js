@@ -1,50 +1,14 @@
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
 const SET_USERS = "SET_USERS";
+const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+const SET_TOTAL_USERS_COUNT = "SET_TOTAL_USERS_COUNT";
 
 const initialState = {
-  usersData: [
-    // {
-    //   id: 1,
-    //   username: "Sveta K.",
-    //   location: {
-    //     city: "Minsk",
-    //     country: "Belarus",
-    //   },
-    //   status: "I am so pretty",
-    //   isFollowing: false,
-    // },
-    // {
-    //   id: 2,
-    //   username: "Sveta K.",
-    //   location: {
-    //     city: "Minsk",
-    //     country: "Belarus",
-    //   },
-    //   status: "I am so pretty",
-    //   isFollowing: true,
-    // },
-    // {
-    //   id: 3,
-    //   username: "Sveta K.",
-    //   location: {
-    //     city: "Minsk",
-    //     country: "Belarus",
-    //   },
-    //   status: "I am so pretty",
-    //   isFollowing: false,
-    // },
-    // {
-    //   id: 4,
-    //   username: "Sveta K.",
-    //   location: {
-    //     city: "Minsk",
-    //     country: "Belarus",
-    //   },
-    //   status: "I am so pretty",
-    //   isFollowing: false,
-    // },
-  ],
+  usersData: [],
+  pageSize: 5,
+  totalUsersCount: 0,
+  currentPage: 1,
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -54,7 +18,7 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         usersData: state.usersData.map((user) => {
           if (user.id === action.userId) {
-            return { ...user, isFollowing: true };
+            return { ...user, followed: true };
           }
           return user;
         }),
@@ -64,13 +28,17 @@ const usersReducer = (state = initialState, action) => {
         ...state,
         usersData: state.usersData.map((user) => {
           if (user.id === action.userId) {
-            return { ...user, isFollowing: false };
+            return { ...user, followed: false };
           }
           return user;
         }),
       };
     case SET_USERS:
-      return { ...state, usersData: [...state.usersData, ...action.users] };
+      return { ...state, usersData: action.users };
+    case SET_CURRENT_PAGE:
+      return { ...state, currentPage: action.currentPage };
+    case SET_TOTAL_USERS_COUNT:
+      return { ...state, totalUsersCount: action.totalUsersCount };
     default:
       return state;
   }
@@ -94,5 +62,19 @@ export const setUsersAC = (users) => {
   return {
     type: SET_USERS,
     users: users,
+  };
+};
+
+export const setCurrentPageAC = (currentPage) => {
+  return {
+    type: SET_CURRENT_PAGE,
+    currentPage: currentPage,
+  };
+};
+
+export const setTotalUsersCountAC = (totalUsersCount) => {
+  return {
+    type: SET_TOTAL_USERS_COUNT,
+    totalUsersCount: totalUsersCount,
   };
 };
