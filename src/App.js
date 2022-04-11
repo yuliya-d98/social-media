@@ -1,15 +1,14 @@
-// import logo from "./logo.svg";
 import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header";
-import Sidebar from "./components/sidebar/sidebar";
-import Profile from "./components/main/profile/profile";
 import DialogsContainer from "./components/main/dialogs/dialogsContainer";
-import News from "./components/main/news/news";
 import Music from "./components/main/music/music";
+import News from "./components/main/news/news";
+import ProfileContainer from "./components/main/profile/profileContainer";
 import Settings from "./components/main/settings/settings";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UsersContainer from "./components/main/users/usersContainer";
+import Sidebar from "./components/sidebar/sidebar";
 
 function App(props) {
   return (
@@ -19,7 +18,7 @@ function App(props) {
         <Sidebar />
         <div className="content-container">
           <Routes>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/*" element={<ProfileContainer />} />
             <Route path="/dialogs/*" element={<DialogsContainer />} />
             <Route path="/news" element={<News />} />
             <Route path="/music" element={<Music />} />

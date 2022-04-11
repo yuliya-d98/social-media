@@ -1,10 +1,13 @@
+import { NavLink } from 'react-router-dom';
 import s from './users.module.css';
 
 const User = (props) => {
     return (
         <div className={s.user} id={props.userId}>
             <div className={s.userImgAndFollow}>
-                <img src={props.photo} className={s.image} alt='avatar' />
+                <NavLink to={`/profile/${props.userId}`}>
+                    <img src={props.photo} className={s.image} alt='avatar' />
+                </NavLink>
                 {props.followed === true ?
                     <div className={s.followButton} onClick={() => props.unfollow(props.userId)}>Unfollow</div>
                     : <div className={s.followButton} onClick={() => props.follow(props.userId)}>Follow</div>}

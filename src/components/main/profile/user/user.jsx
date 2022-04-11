@@ -1,27 +1,21 @@
 import React from "react";
+import Preloader from "../../../common/preloader";
 import s from './user.module.css';
 
-// const yuliya = {
-//     name: 'Yuliya', 
-//     birth: '07.30.1998', 
-//     city: 'Minsk', 
-//     education: `BNTU'20`, 
-//     site: 'https://github.com/yuliya-d98/',
-// }
+// const bestAvatarEver = 'https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg';
 
-const User = ({name = 'Yuliya', birth = '30.07.1998', city = 'Minsk', education = `BNTU'20`, site = 'https://github.com/yuliya-d98/'} = {}) => {
+
+const User = (props) => {
+    if (!props.profile) {
+        return <Preloader />
+    }
     return (
         <div className={s.user}>
-            <img className={s.image} src="https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg" alt="user" />
+            <img className={s.image} src={props.profile.photos.large ? props.profile.photos.large : ''} alt="user" />
             <div>
-                <h2 className={s.header}>{name}</h2>
-                <p className={s.text}>{`Date of Birth: ${birth}`}</p>
-                <p className={s.text}>{`City: ${city}`}</p>
-                <p className={s.text}>{`Education: ${education}`}</p>
-                <p className={s.text}>
-                    {`Site: `}
-                    <a className={s.text} href={site} target='_blank' rel="noreferrer">{site}</a>
-                </p>
+                <h2 className={s.header}>{props.profile.fullName}</h2>
+                <p className={s.text}>{`About me: ${props.profile.aboutMe ? props.profile.aboutMe : 'no status'}`}</p>
+                <p className={s.text}>{`Looking for a job: ${props.profile.lookingForAJob ? 'yes' : 'no'}`}</p>
             </div>
         </div>
     )

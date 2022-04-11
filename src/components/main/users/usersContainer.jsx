@@ -7,15 +7,10 @@ import Users from "./users";
 class UsersContainer extends React.Component {
     constructor(props) {
         super(props);
-        // this.usersList = this.props.users.map(u => {
-        //     return <User name={u.name} followed={u.followed} status={u.status} userId={u.id} photo={u.photos.small ? u.photos.small : 'https://adindex.ru/files/292751/%D0%B4%D0%B5%D0%B42.png'} follow={this.props.follow} unfollow={this.props.unfollow} />
-        // });
         this.numOfPages = 5;
     }
 
     componentDidMount() {
-        // if (this.props.users.length === 0) {
-
         this.props.toggleIsFetching(true);
         const params = new URLSearchParams({
             page: this.props.currentPage,
@@ -29,7 +24,6 @@ class UsersContainer extends React.Component {
                 this.props.setTotalUsersCount(responce.data.totalCount);
             })
             .catch(e => console.error(e))
-        // }
     }
 
     onPageChanged = (pageNumber) => {
@@ -75,35 +69,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         follow: (userId) => {
-//             const action = followAC(userId);
-//             dispatch(action);
-//         },
-//         unfollow: (userId) => {
-//             const action = unfollowAC(userId);
-//             dispatch(action);
-//         },
-//         setUsers: (users) => {
-//             const action = setUsersAC(users);
-//             dispatch(action);
-//         },
-//         setCurrentPage: (currentPage) => {
-//             const action = setCurrentPageAC(currentPage);
-//             dispatch(action);
-//         },
-//         setTotalUsersCount: (totalUsersCount) => {
-//             const action = setTotalUsersCountAC(totalUsersCount);
-//             dispatch(action);
-//         },
-//         toggleIsFetching: (isFetching) => {
-//             const action = toggleIsFetchingAC(isFetching);
-//             dispatch(action);
-//         },
-//     }
-// }
-
 export default connect(mapStateToProps, {
     follow,
     unfollow,
@@ -111,5 +76,4 @@ export default connect(mapStateToProps, {
     setCurrentPage,
     setTotalUsersCount,
     toggleIsFetching,
-},
-)(UsersContainer);
+})(UsersContainer);
