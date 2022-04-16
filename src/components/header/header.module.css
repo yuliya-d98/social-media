@@ -1,0 +1,17 @@
+.header {
+  grid-area: header;
+  background-color: var(--color-main);
+  color: white;
+  padding: var(--inner-padding);
+  display: flex;
+  justify-content: space-between;
+}
+
+.loginLink {
+  color: white;
+  text-decoration: none;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Header from "./components/header";
+import HeaderContainer from "./components/header/header-container";
 import DialogsContainer from "./components/main/dialogs/dialogsContainer";
 import Music from "./components/main/music/music";
 import News from "./components/main/news/news";
@@ -14,7 +14,7 @@ function App(props) {
   return (
     <BrowserRouter>
       <div className="container">
-        <Header />
+        <HeaderContainer />
         <Sidebar />
         <div className="content-container">
           <Routes>
