@@ -17,12 +17,20 @@
 }
 
 .followButton {
+  display: block;
+  width: 100%;
+  outline: none;
+  border: none;
   text-align: center;
   color: white;
   background-color: aqua;
   margin-top: 10px;
   padding: 5px 0;
   cursor: pointer;
+}
+
+.followButton:disabled {
+  background-color: lightslategray;
 }
 
 .userInfo {

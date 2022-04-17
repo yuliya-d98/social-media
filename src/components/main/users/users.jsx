@@ -18,7 +18,17 @@ const Users = (props) => {
                 <span className={props.currentPage === pagesCount ? `${s.page} ${s.active}` : s.page} onClick={() => props.onPageChanged(pagesCount)}>{pagesCount}</span>
             </div>
             {props.isFetching ? <Preloader /> : null}
-            {props.users.map(u => <User name={u.name} followed={u.followed} status={u.status} userId={u.id} photo={u.photos.small ? u.photos.small : 'https://adindex.ru/files/292751/%D0%B4%D0%B5%D0%B42.png'} follow={props.follow} unfollow={props.unfollow} />)}
+            {props.users.map(u => <User
+                name={u.name}
+                followed={u.followed}
+                status={u.status}
+                userId={u.id}
+                photo={u.photos.small ? u.photos.small : 'https://adindex.ru/files/292751/%D0%B4%D0%B5%D0%B42.png'}
+                follow={props.follow}
+                unfollow={props.unfollow}
+                followingInProgress={props.followingInProgress}
+                toggleFollowingProgress={props.toggleFollowingProgress}
+            />)}
             <div className={s.showMoreContainer}>
                 <p className={s.showMoreBtn}>Show More</p>
             </div>
