@@ -18,6 +18,12 @@ export const usersAPI = {
       .get(`/users?${params.toString()}`)
       .then((responce) => responce.data);
   },
+  getProfile(userId) {
+    return instance
+      .get(`/profile/${userId}`)
+      .then((responce) => responce.data)
+      .catch((e) => console.error(e));
+  },
 };
 
 export const followAPI = {

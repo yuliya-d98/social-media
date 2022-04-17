@@ -5,7 +5,7 @@ import s from './header.module.css';
 const Header = (props) => {
     return (
         <header className={s.header}>
-            <h1>Social Media</h1>
+            <h1>Social Network</h1>
             <div className={s.loginBlock}>
                 {props.isAuth
                     ? props.login
