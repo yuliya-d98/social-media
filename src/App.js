@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import HeaderContainer from "./components/header/header-container";
 import DialogsContainer from "./components/main/dialogs/dialogsContainer";
+import Login from "./components/main/login/login";
 import Music from "./components/main/music/music";
 import News from "./components/main/news/news";
 import ProfileContainer from "./components/main/profile/profileContainer";
@@ -26,6 +27,7 @@ function App(props) {
             <Route path="/music" element={<Music />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/users" element={<UsersContainer />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div>
