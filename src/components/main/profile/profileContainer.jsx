@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useMatch } from 'react-router-dom';
+import { compose } from 'redux';
 import { usersAPI } from '../../../api/api';
 import { withAuthRedirect } from '../../../hoc/with-auth-redirect';
 import { setUserProfile } from '../../../redux/profile-reducer';
@@ -21,8 +22,6 @@ class ProfileContainer extends React.Component {
     }
 }
 
-const AuthRedirectComponent = withAuthRedirect(ProfileContainer);
-
 const mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
 })
@@ -35,6 +34,8 @@ export const withRouter = (Component) => {
     return RouterComponent;
 }
 
-const WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
-
-export default connect(mapStateToProps, { setUserProfile })(WithUrlDataContainerComponent);
+export default compose(
+    connect(mapStateToProps, { setUserProfile }),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer);
