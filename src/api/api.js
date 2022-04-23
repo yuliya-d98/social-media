@@ -18,11 +18,24 @@ export const usersAPI = {
       .get(`/users?${params.toString()}`)
       .then((responce) => responce.data);
   },
+};
+
+export const profileAPI = {
   getProfile(userId) {
     return instance
       .get(`/profile/${userId}`)
       .then((responce) => responce.data)
       .catch((e) => console.error(e));
+  },
+  getStatus(userId) {
+    return instance
+      .get(`/profile/status/${userId}`)
+      .then((responce) => responce.data);
+  },
+  updateStatus(status) {
+    return instance
+      .put(`/profile/status`, { status })
+      .then((responce) => responce.data);
   },
 };
 

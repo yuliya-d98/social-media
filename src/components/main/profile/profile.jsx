@@ -7,7 +7,7 @@ const Profile = (props) => {
     return (
         <main className={s.content}>
             <div className={s.parallax}></div>
-            <User profile={props.profile} />
+            <User profile={props.profile} status={props.status} updateStatus={props.updateStatus} />
             <PostsContainer />
         </main>
     )

@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  z-index: 0;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 3px 0;
+  border: none;
+  border-bottom: 1px solid lightblue;
+  font-size: 16px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:focus:invalid {
+  border-color: red;
+}
+
+.text {
+  font-style: italic;
+  color: darkslategray;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}

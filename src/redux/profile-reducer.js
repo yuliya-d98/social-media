@@ -1,6 +1,9 @@
+import { profileAPI } from "../api/api";
+
 const ADD_POST = "ADD-POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
+const SET_STATUS = "SET_STATUS";
 
 const initialState = {
   postsData: [
@@ -10,6 +13,7 @@ const initialState = {
   ],
   newPostText: "it-kamasutra.com",
   profile: null,
+  status: "",
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -29,6 +33,8 @@ const profileReducer = (state = initialState, action) => {
       return { ...state, newPostText: action.text };
     case SET_USER_PROFILE:
       return { ...state, profile: action.userProfile };
+    case SET_STATUS:
+      return { ...state, status: action.status };
     default:
       return state;
   }
@@ -49,3 +55,32 @@ export const setUserProfile = (userProfile) => ({
   type: SET_USER_PROFILE,
   userProfile,
 });
+
+export const setStatus = (status) => ({
+  type: SET_STATUS,
+  status: status,
+});
+
+export const getStatus = (userId) => {
+  return (dispatch) => {
+    profileAPI
+      .getStatus(userId)
+      .then((data) => {
+        dispatch(setStatus(data));
+      })
+      .catch((error) => console.error(error));
+  };
+};
+
+export const updateStatus = (status) => {
+  return (dispatch) => {
+    profileAPI
+      .updateStatus(status)
+      .then((data) => {
+        if (data.resultCode === 0) {
+          dispatch(setStatus(status));
+        }
+      })
+      .catch((error) => console.error(error));
+  };
+};
