@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { withAuthRedirect } from "../../../hoc/with-auth-redirect";
 import { followThunkCreator, getUsersThunkCreator, unfollowThunkCreator } from "../../../redux/users-reducer";
 import Users from "./users";
 
@@ -49,7 +48,7 @@ const mapStateToProps = (state) => {
 }
 
 export default compose(
-    withAuthRedirect,
+    // withAuthRedirect,
     connect(mapStateToProps, {
         follow: followThunkCreator,
         unfollow: unfollowThunkCreator,

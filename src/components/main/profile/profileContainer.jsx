@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Navigate, useMatch } from 'react-router-dom';
 import { compose } from 'redux';
 import { profileAPI } from '../../../api/api';
-import { withAuthRedirect } from '../../../hoc/with-auth-redirect';
-import { setUserProfile, getStatus, updateStatus } from '../../../redux/profile-reducer';
+import { getStatus, setUserProfile, updateStatus } from '../../../redux/profile-reducer';
 import Profile from './profile';
 
 class ProfileContainer extends React.Component {
@@ -15,7 +14,7 @@ class ProfileContainer extends React.Component {
         } else if (this.props.isAuth) {
             userId = this.props.authorizedUserId;
         } else {
-            return <Navigate to='/login' />
+            return <Navigate to="/login" />;
         }
 
         profileAPI
@@ -51,5 +50,5 @@ export const withRouter = (Component) => {
 export default compose(
     connect(mapStateToProps, { setUserProfile, getStatus, updateStatus }),
     withRouter,
-    withAuthRedirect
+    // withAuthRedirect
 )(ProfileContainer);
