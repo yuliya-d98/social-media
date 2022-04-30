@@ -1,15 +1,17 @@
+import { Field, reduxForm } from 'redux-form';
+import { required } from '../../../utils/validators/validators';
+import { Input } from '../../common/forms-controls/forms-controls';
 import s from './login.module.css';
-import { reduxForm, Field } from 'redux-form'
 
 const LoginForm = (props) => {
     return (
         <form className={s.form} onSubmit={props.handleSubmit}>
             <label className={s.inputLabel} htmlFor="email">Email</label>
-            <Field component='input' className={s.textInput} type="email" placeholder="email" id="email" name='email' />
+            <Field component={Input} validate={[required]} className={s.textInput} type="email" placeholder="email" id="email" name='email' />
             <label className={s.inputLabel} htmlFor="password">Password</label>
-            <Field component='input' className={s.textInput} type="password" placeholder="password" autoComplete='on' id="password" name='password' />
+            <Field component={Input} validate={[required]} className={s.textInput} type="password" placeholder="password" autoComplete='on' id="password" name='password' />
             <div className={s.buttonsContainer}>
-                <Field component='input' className={s.checkbox} type="checkbox" id="remember-me" name='rememberMe' />
+                <Field component={Input} className={s.checkbox} type="checkbox" id="remember-me" name='rememberMe' />
                 <label className={s.checkboxLabel} htmlFor="remember-me">Remember me</label>
                 <button className={s.button} type="submit">Login</button>
             </div>
