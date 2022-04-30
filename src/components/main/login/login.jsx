@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import { required } from '../../../utils/validators/validators';
 import { Input } from '../../common/forms-controls/forms-controls';
 import s from './login.module.css';
+import formStyle from '../../common/forms-controls/forms-controls.module.css'
 import { login } from '../../../redux/auth-reducer';
 import { Navigate } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ const LoginForm = (props) => {
                 <label className={s.checkboxLabel} htmlFor="remember-me">Remember me</label>
                 <button className={s.button} type="submit">Login</button>
             </div>
+            {props.error && <p className={formStyle.formSummaryError}>{props.error}</p>}
         </form>
     )
 }

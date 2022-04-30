@@ -13,3 +13,11 @@
   left: 0;
   top: 100%;
 }
+
+.formSummaryError {
+  border: 1px solid red;
+  padding: 5px;
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}
