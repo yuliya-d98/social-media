@@ -3,6 +3,13 @@
   border: 1px solid red;
 }
 
+.formControl {
+  position: relative;
+}
+
 .formControl.error span {
   color: red;
+  position: absolute;
+  left: 0;
+  top: 100%;
 }

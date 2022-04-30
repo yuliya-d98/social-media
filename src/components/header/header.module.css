@@ -7,11 +7,21 @@
   justify-content: space-between;
 }
 
-.loginLink {
+.button {
+  display: block;
+  border: none;
+  background-color: steelblue;
   color: white;
-  text-decoration: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.loginLink:hover {
-  text-decoration: underline;
+.button:hover {
+  background-color: lightseagreen;
+}
+
+.login {
+  text-align: right;
+  margin-bottom: 10px;
 }
