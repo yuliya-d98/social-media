@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useMatch } from 'react-router-dom';
+import { Navigate, useMatch } from 'react-router-dom';
 import { compose } from 'redux';
 import { profileAPI } from '../../../api/api';
 import { withAuthRedirect } from '../../../hoc/with-auth-redirect';
@@ -9,7 +9,15 @@ import Profile from './profile';
 
 class ProfileContainer extends React.Component {
     componentDidMount() {
-        const userId = this.props.match ? this.props.match.params.userId : 23357;
+        let userId;
+        if (this.props.match) {
+            userId = this.props.match.params.userId;
+        } else if (this.props.isAuth) {
+            userId = this.props.authorizedUserId;
+        } else {
+            return <Navigate to='/login' />
+        }
+
         profileAPI
             .getProfile(userId)
             .then(data => this.props.setUserProfile(data))
@@ -28,6 +36,8 @@ class ProfileContainer extends React.Component {
 const mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
+    authorizedUserId: state.auth.userId,
+    isAuth: state.auth.isAuth,
 })
 
 export const withRouter = (Component) => {
