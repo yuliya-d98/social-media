@@ -19,14 +19,18 @@ const addPostForm = (props) => {
 
 const AddPostReduxForm = reduxForm({ form: 'addPost' })(addPostForm)
 
-const Posts = (props) => {
-
+const Posts = React.memo(props => {
     const postItems = props.postsData
         .map(post => <Post username={post.username} message={post.message} />)
+
 
     const onAddPost = (values) => {
         props.addPost(values.post);
     }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return nextProps !== this.props && nextState !== this.state
+    // }
 
     return (
         <div className={s.posts}>
@@ -35,6 +39,6 @@ const Posts = (props) => {
             {postItems}
         </div>
     )
-}
+})
 
 export default Posts;
