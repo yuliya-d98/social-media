@@ -1,6 +1,6 @@
 import { getAuthInfoThunkCreator } from "./auth-reducer";
 
-const SET_INITIALIZED_SUCCESS = "SET_INITIALIZED_SUCCESS";
+const SET_INITIALIZED_SUCCESS = "app/SET_INITIALIZED_SUCCESS";
 
 const initialState = {
   initialized: false,

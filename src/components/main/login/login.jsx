@@ -7,9 +7,9 @@ import formStyle from '../../common/forms-controls/forms-controls.module.css'
 import { login } from '../../../redux/auth-reducer';
 import { Navigate } from 'react-router-dom';
 
-const LoginForm = (props) => {
+const LoginForm = ({ handleSubmit, error }) => {
     return (
-        <form className={s.form} onSubmit={props.handleSubmit}>
+        <form className={s.form} onSubmit={handleSubmit}>
             <label className={s.inputLabel} htmlFor="email">Email</label>
             <Field component={Input} validate={[required]} className={s.textInput} type="email" placeholder="email" id="email" name='email' />
             <label className={s.inputLabel} htmlFor="password">Password</label>
@@ -19,7 +19,7 @@ const LoginForm = (props) => {
                 <label className={s.checkboxLabel} htmlFor="remember-me">Remember me</label>
                 <button className={s.button} type="submit">Login</button>
             </div>
-            {props.error && <p className={formStyle.formSummaryError}>{props.error}</p>}
+            {error && <p className={formStyle.formSummaryError}>{error}</p>}
         </form>
     )
 }
@@ -28,14 +28,14 @@ const LoginReduxForm = reduxForm({
     form: 'login'
 })(LoginForm)
 
-const Login = (props) => {
+const Login = ({ isAuth, login }) => {
 
-    if (props.isAuth) {
+    if (isAuth) {
         return <Navigate to='/profile' />
     }
 
     const onSubmit = (formData) => {
-        props.login(formData.email, formData.password, formData.rememberMe);
+        login(formData.email, formData.password, formData.rememberMe);
     }
 
     return (

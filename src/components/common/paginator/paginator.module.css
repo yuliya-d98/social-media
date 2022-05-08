@@ -1,0 +1,17 @@
+.pagination {
+  margin: 20px 0 40px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.page {
+  display: inline-block;
+  border: 1px solid lightblue;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.page:hover,
+.active {
+  background-color: lightblue;
+}

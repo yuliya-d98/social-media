@@ -1,10 +1,11 @@
 import React from "react";
 import s from './post.module.css';
+import defaultAvatar from '../../../../../assets/user-avatar.png';
 
 const Post = (props) => {
     return (
         <div className={s.post}>
-            <img className={s.avatar} src="https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg" alt="user" />
+            <img className={s.avatar} src={defaultAvatar} alt="user" />
             <div className={s.text}>
                 <p className={s.username}>{props.username}</p>
                 <p className={s.posttext}>{props.message}</p>

@@ -1,7 +1,7 @@
 import { stopSubmit } from "redux-form";
 import { authAPI } from "../api/api";
 
-const SET_USER_DATA = "SET_USER_DATA";
+const SET_USER_DATA = "auth/SET_USER_DATA";
 
 const initialState = {
   userId: null,
@@ -35,48 +35,35 @@ export const setAuthUserData = (userId, email, login, isAuth) => ({
   },
 });
 
-export const getAuthInfoThunkCreator = () => {
-  return (dispatch) => {
-    return authAPI
-      .me()
-      .then((data) => {
-        if (data.resultCode === 0) {
-          const { id, email, login } = data.data;
-          dispatch(setAuthUserData(id, email, login, true));
-        }
-      })
-      .catch((error) => console.error(error));
-  };
+export const getAuthInfoThunkCreator = () => async (dispatch) => {
+  const data = await authAPI.me();
+  if (data.resultCode === 0) {
+    const { id, email, login } = data.data;
+    dispatch(setAuthUserData(id, email, login, true));
+  }
+  // return data;
 };
 
-export const login = (email, password, rememberMe) => (dispatch) => {
-  authAPI
-    .login(email, password, rememberMe)
-    .then((data) => {
-      if (data.resultCode === 0) {
-        dispatch(getAuthInfoThunkCreator());
-      } else if (data.resultCode === 1) {
-        const errorText = data.messages.length
-          ? data.messages[0]
-          : "Incorrect Email or Password";
-        const action = stopSubmit("login", {
-          _error: errorText,
-        });
-        dispatch(action);
-      } else {
-        alert(data.resultCode, data.messages[0]);
-      }
-    })
-    .catch((error) => console.error(error));
+export const login = (email, password, rememberMe) => async (dispatch) => {
+  const data = await authAPI.login(email, password, rememberMe);
+  if (data.resultCode === 0) {
+    dispatch(getAuthInfoThunkCreator());
+  } else if (data.resultCode === 1) {
+    const errorText = data.messages.length
+      ? data.messages[0]
+      : "Incorrect Email or Password";
+    const action = stopSubmit("login", {
+      _error: errorText,
+    });
+    dispatch(action);
+  } else {
+    alert(data.resultCode, data.messages[0]);
+  }
 };
 
-export const logout = () => (dispatch) => {
-  authAPI
-    .logout()
-    .then((data) => {
-      if (data.resultCode === 0) {
-        dispatch(setAuthUserData(null, null, null, false));
-      }
-    })
-    .catch((error) => console.error(error));
+export const logout = () => async (dispatch) => {
+  const data = authAPI.logout();
+  if (data.resultCode === 0) {
+    dispatch(setAuthUserData(null, null, null, false));
+  }
 };
