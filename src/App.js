@@ -13,6 +13,8 @@ import Settings from "./components/main/settings/settings";
 import UsersContainer from "./components/main/users/usersContainer";
 import Sidebar from "./components/sidebar/sidebar";
 import { initializeApp } from "./redux/app-reducer";
+import store from "./redux/redux-store";
+import { Provider } from "react-redux";
 
 class App extends React.Component {
   componentDidMount() {
@@ -52,4 +54,16 @@ const mapStateToProps = (state) => ({
   initialized: state.app.initialized,
 });
 
-export default connect(mapStateToProps, { initializeApp })(App);
+const AppWithRouter = connect(mapStateToProps, { initializeApp })(App);
+
+const MainApp = (props) => {
+  return (
+    <React.StrictMode>
+      <Provider store={store}>
+        <AppWithRouter />
+      </Provider>
+    </React.StrictMode>
+  );
+};
+
+export default MainApp;
