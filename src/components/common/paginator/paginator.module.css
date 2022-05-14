@@ -11,6 +11,11 @@
   cursor: pointer;
 }
 
+.button {
+  background-color: lightsteelblue;
+  border-color: lightsteelblue;
+}
+
 .page:hover,
 .active {
   background-color: lightblue;

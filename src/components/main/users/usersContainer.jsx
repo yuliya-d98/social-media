@@ -8,7 +8,7 @@ import Users from "./users";
 class UsersContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.numOfPages = 5;
+        this.numOfPages = 10;
     }
 
     componentDidMount() {
