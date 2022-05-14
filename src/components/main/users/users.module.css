@@ -56,17 +56,3 @@
   margin-top: 10px;
   font-style: italic;
 }
-
-.showMoreBtn {
-  font-weight: 700;
-  padding: 10px 20px;
-  margin: 50px auto;
-  background-color: cadetblue;
-  color: white;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.showMoreBtn:hover {
-  background-color: lightseagreen;
-}

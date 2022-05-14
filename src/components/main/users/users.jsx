@@ -25,9 +25,6 @@ const Users = (props) => {
                 unfollow={props.unfollow}
                 followingInProgress={props.followingInProgress}
             />)}
-            <div className={s.showMoreContainer}>
-                <p className={s.showMoreBtn}>Show More</p>
-            </div>
         </div>
     )
 }
