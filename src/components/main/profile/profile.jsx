@@ -6,8 +6,7 @@ import PostsContainer from './posts/postsContainer';
 const Profile = (props) => {
     return (
         <main className={s.content}>
-            <div className={s.parallax}></div>
-            <User profile={props.profile} status={props.status} updateStatus={props.updateStatus} />
+            <User profile={props.profile} status={props.status} updateStatus={props.updateStatus} isOwner={props.isOwner} savePhoto={props.savePhoto} />
             <PostsContainer />
         </main>
     )

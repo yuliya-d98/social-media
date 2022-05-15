@@ -21,7 +21,9 @@ const Paginator = (props) => {
         <div className={s.pagination}>
             {(portionNumber > 1) && <button onClick={() => setPortionNumber(1)} className={`${s.page} ${s.button}`}>{'<<'}</button>}
             {(portionNumber > 1) && <button onClick={() => setPortionNumber(portionNumber - 1)} className={`${s.page} ${s.button}`}>Prev</button>}
-            {pages.map(p => <span className={currentPage === p ? `${s.page} ${s.active}` : s.page} onClick={() => onPageChanged(p)} key={p}>{p}</span>)}
+            <div className={s.pages}>
+                {pages.map(p => <span className={currentPage === p ? `${s.page} ${s.active}` : s.page} onClick={() => onPageChanged(p)} key={p}>{p}</span>)}
+            </div>
             {(portionNumber < lastPortion) && <button onClick={() => setPortionNumber(portionNumber + 1)} className={`${s.page} ${s.button}`}>Next</button>}
             {(portionNumber < lastPortion) && <button onClick={() => setPortionNumber(lastPortion)} className={`${s.page} ${s.button}`}>{'>>'}</button>}
         </div>

@@ -4,6 +4,12 @@
   justify-content: space-evenly;
 }
 
+.pages {
+  width: calc(100% - 300px);
+  display: flex;
+  justify-content: space-between;
+}
+
 .page {
   display: inline-block;
   border: 1px solid lightblue;
@@ -14,9 +20,11 @@
 .button {
   background-color: lightsteelblue;
   border-color: lightsteelblue;
+  color: white;
 }
 
 .page:hover,
 .active {
   background-color: lightblue;
+  border-color: lightblue;
 }

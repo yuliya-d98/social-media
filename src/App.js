@@ -1,6 +1,8 @@
 import React, { Suspense } from "react";
 import { connect, Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+// for deploy
+// import { HashRouter, Route, Routes } from "react-router-dom";
 import { initializeApp } from "./redux/app-reducer";
 import "./App.css";
 import store from "./redux/redux-store";
@@ -34,7 +36,8 @@ class App extends React.Component {
     }
 
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        {/* <HashRouter basename="/"> */}
         <div className="container">
           <HeaderContainer />
           <Sidebar />
@@ -55,6 +58,7 @@ class App extends React.Component {
           </div>
         </div>
       </BrowserRouter>
+      // </HashRouter>
     );
   }
 }
