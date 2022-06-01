@@ -15,9 +15,9 @@ const LoginForm = ({ handleSubmit, error }) => {
             <label className={s.inputLabel} htmlFor="password">Password</label>
             <Field component={Input} validate={[required]} className={s.textInput} type="password" placeholder="password" autoComplete='on' id="password" name='password' />
             <div className={s.buttonsContainer}>
-                <Field component='input' className={s.checkbox} type="checkbox" id="remember-me" name='rememberMe' />
-                <label className={s.checkboxLabel} htmlFor="remember-me">Remember me</label>
-                <button className={s.button} type="submit">Login</button>
+                <Field component='input' className={formStyle.checkbox} type="checkbox" id="remember-me" name='rememberMe' />
+                <label className={formStyle.checkboxLabel} htmlFor="remember-me">Remember me</label>
+                <button className={formStyle.button} type="submit">Login</button>
             </div>
             {error && <p className={formStyle.formSummaryError}>{error}</p>}
         </form>

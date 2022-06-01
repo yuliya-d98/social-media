@@ -1,0 +1,19 @@
+.label {
+  text-transform: capitalize;
+}
+
+.link {
+  margin: 20px 0;
+}
+
+.checkbox {
+  display: inline-block;
+}
+
+.form {
+  flex: auto;
+}
+
+.paragraph {
+  margin: 25px 0 15px;
+}

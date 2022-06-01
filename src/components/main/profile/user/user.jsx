@@ -1,19 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import Preloader from "../../../common/preloader";
 import ProfileStatusWithHooks from "./profile-status-with-hooks";
 import s from './user.module.css';
 import defaultAvatar from '../../../../assets/user-avatar.png';
+import ProfileDataForm from "./profile-data-form";
+import formStyle from './../../../common/forms-controls/forms-controls.module.css';
 
 // const bestAvatarEver = 'https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg';
 
 
 const UserLink = ({ href }) => {
     return (
-        <i>{href ? <a href={href} target='_blank' rel="noreferrer">click</a> : 'no link'}</i>
+        <i>{href ? <a href={href} target='_blank' rel="noreferrer">{href}</a> : 'no link'}</i>
     )
 }
 
-const User = ({ profile, status, updateStatus, isOwner, savePhoto }) => {
+const ProfileData = ({ profile, status, updateStatus, isOwner, toEditMode }) => {
+    return (
+        <div>
+            <h2 className={s.header}>{profile.fullName}</h2>
+            <ProfileStatusWithHooks status={status} updateStatus={updateStatus} isOwner={isOwner} />
+            <div className={s.aboutUser}>
+                <p>About me: <i>{profile.aboutMe || 'no info'}</i></p>
+                <p>Looking for a job: <i>{profile.lookingForAJob ? 'yes' : 'no'}</i></p>
+                {profile.lookingForAJob && <p>My professional skills: <i>{profile.lookingForAJobDescription || 'no description'}</i></p>}
+            </div>
+            <div className={s.contacts}>
+                <p>Contacts:</p>
+                {Object.keys(profile.contacts).map(link => <p key={link}>{link}: <UserLink href={profile.contacts[link]} /></p>)}
+            </div>
+            {isOwner && <button onClick={toEditMode} className={formStyle.button + ' ' + s.button}>Edit</button>}
+        </div>
+    )
+}
+
+const User = ({ profile, status, updateStatus, isOwner, savePhoto, setProfileData }) => {
+    const [editMode, setEditMode] = useState(false);
+
+    const toEditMode = () => setEditMode(true);
+
+    const fromEditMode = () => setEditMode(false);
+
     if (!profile) {
         return <Preloader />
     }
@@ -24,9 +51,8 @@ const User = ({ profile, status, updateStatus, isOwner, savePhoto }) => {
         }
     }
 
-    const links = [];
-    for (let link in profile.contacts) {
-        links.push(<p>{link}: <UserLink href={profile.contacts[link]} /></p>)
+    const onSubmit = (formData) => {
+        setProfileData(formData).then(() => fromEditMode());
     }
 
     return (
@@ -36,19 +62,9 @@ const User = ({ profile, status, updateStatus, isOwner, savePhoto }) => {
                 {isOwner && <input className={s.input} type='file' onChange={onMainPhotoSelected} id='photo' />}
                 {isOwner && <label className={s.label} htmlFor="photo">Choose photo</label>}
             </div>
-            <div>
-                <h2 className={s.header}>{profile.fullName}</h2>
-                <ProfileStatusWithHooks status={status} updateStatus={updateStatus} isOwner={isOwner} />
-                <div className={s.aboutUser}>
-                    <p>About me: <i>{profile.aboutMe || 'no info'}</i></p>
-                    <p>Looking for a job: <i>{profile.lookingForAJob ? 'yes' : 'no'}</i></p>
-                    {profile.lookingForAJob && <p>Looking for a job decription: <i>{profile.lookingForAJobDescription || 'no description'}</i></p>}
-                </div>
-                <div className={s.contacts}>
-                    <p>Contacts:</p>
-                    {links}
-                </div>
-            </div>
+            {editMode
+                ? <ProfileDataForm initialValues={profile} fromEditMode={fromEditMode} onSubmit={onSubmit} profile={profile} />
+                : <ProfileData profile={profile} status={status} updateStatus={updateStatus} isOwner={isOwner} toEditMode={toEditMode} />}
         </div>
     )
 }

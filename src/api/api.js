@@ -46,6 +46,11 @@ export const profileAPI = {
       })
       .then((responce) => responce.data);
   },
+  setProfile(userId, formData) {
+    return instance
+      .put(`/profile`, { userId, ...formData })
+      .then((responce) => responce.data);
+  },
 };
 
 export const followAPI = {

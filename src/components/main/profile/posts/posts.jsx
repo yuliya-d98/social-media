@@ -5,13 +5,14 @@ import { reduxForm } from "redux-form";
 import { Field } from "redux-form";
 import { maxLengthCreator, required } from "../../../../utils/validators/validators";
 import { Textarea } from "../../../common/forms-controls/forms-controls";
+import formStyle from '../../../common/forms-controls/forms-controls.module.css';
 
 const maxLength400 = maxLengthCreator(400);
 
 const addPostForm = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
-            <Field component={Textarea} validate={[required, maxLength400]} className={s.textarea} name="post" rows="5" placeholder="your news..." required />
+            <Field component={Textarea} validate={[required, maxLength400]} className={formStyle.textarea} name="post" rows="5" placeholder="your news..." required />
             <button className={s.button}>Send</button>
         </form>
     )

@@ -1,6 +1,11 @@
+:root {
+  --color-light: lightskyblue;
+  --color-dark: lightseagreen;
+}
+
 .formControl.error input,
 .formControl.error textarea {
-  border: 1px solid red;
+  border-color: red;
 }
 
 .formControl {
@@ -8,6 +13,7 @@
 }
 
 .formControl.error span {
+  font-size: 14px;
   color: red;
   position: absolute;
   left: 0;
@@ -20,4 +26,76 @@
   color: red;
   text-align: center;
   margin-bottom: 15px;
+}
+
+.input {
+  width: 100%;
+  padding: 5px 7px;
+  border: none;
+  border-bottom: 1px solid var(--color-light);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-dark);
+}
+
+.checkbox {
+  display: none;
+}
+
+.checkboxLabel {
+  margin: 20px 0 15px 0;
+  display: block;
+  cursor: pointer;
+}
+
+.checkboxLabel::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-light);
+  border-radius: 3px;
+  margin-right: 10px;
+  color: white;
+  line-height: 20px;
+  font-size: 25px;
+  margin-bottom: -4px;
+}
+
+.checkbox:checked + .checkboxLabel::before,
+.formControl:has(.checkbox:checked) + .checkboxLabel::before {
+  border: 1px solid var(--color-dark);
+  background-color: var(--color-dark);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+}
+
+.textarea {
+  width: 100%;
+  resize: none;
+  background-color: lightgray;
+  border: 1px solid lightgray;
+  padding: 5px;
+}
+
+.textarea:focus {
+  background-color: #fff;
+  outline: none;
+}
+
+.button {
+  color: white;
+  margin-top: -20px;
+  background-color: #fff;
+  padding: 5px 10px;
+  border: 1px solid var(--color-light);
+  font-size: 14px;
+  background-color: var(--color-light);
+  cursor: pointer;
+}
+
+.button:hover {
+  border: 1px solid var(--color-dark);
+  background-color: var(--color-dark);
 }

@@ -6,19 +6,6 @@
   margin-bottom: 15px;
 }
 
-.textarea {
-  width: 100%;
-  resize: none;
-  background-color: lightgray;
-  border: 1px solid lightgray;
-  padding: 5px;
-}
-
-.textarea:focus {
-  background-color: #fff;
-  outline: none;
-}
-
 .button {
   display: block;
   margin: 10px 0 40px auto;
