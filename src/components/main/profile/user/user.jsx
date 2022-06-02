@@ -1,10 +1,11 @@
+import clsx from 'clsx';
 import React, { useState } from "react";
+import defaultAvatar from '../../../../assets/user-avatar.png';
 import Preloader from "../../../common/preloader";
+import formStyle from './../../../common/forms-controls/forms-controls.module.css';
+import ProfileDataForm from "./profile-data-form";
 import ProfileStatusWithHooks from "./profile-status-with-hooks";
 import s from './user.module.css';
-import defaultAvatar from '../../../../assets/user-avatar.png';
-import ProfileDataForm from "./profile-data-form";
-import formStyle from './../../../common/forms-controls/forms-controls.module.css';
 
 // const bestAvatarEver = 'https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg';
 
@@ -29,7 +30,7 @@ const ProfileData = ({ profile, status, updateStatus, isOwner, toEditMode }) => 
                 <p>Contacts:</p>
                 {Object.keys(profile.contacts).map(link => <p key={link}>{link}: <UserLink href={profile.contacts[link]} /></p>)}
             </div>
-            {isOwner && <button onClick={toEditMode} className={formStyle.button + ' ' + s.button}>Edit</button>}
+            {isOwner && <button onClick={toEditMode} className={clsx(formStyle.button, s.button)}>Edit</button>}
         </div>
     )
 }

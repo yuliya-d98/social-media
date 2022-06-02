@@ -22,8 +22,8 @@ const AddMessageReduxForm = reduxForm({ form: 'dialogAddMessageForm' })(AddMessa
 
 
 const Dialogs = (props) => {
-    const dialogItems = props.messagesPage.dialogData.map(dialog => <DialogItem name={dialog.name} id={dialog.id} />)
-    const messageItems = props.messagesPage.messageData.map(message => <MessageItem text={message.text} />)
+    const dialogItems = props.messagesPage.dialogData.map(dialog => <DialogItem name={dialog.name} id={dialog.id} key={dialog.id} />)
+    const messageItems = props.messagesPage.messageData.map((message, index) => <MessageItem text={message.text} key={index} />)
 
 
     const addNewMessage = (values) => {
