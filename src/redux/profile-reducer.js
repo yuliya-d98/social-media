@@ -126,9 +126,6 @@ export const setProfileData = (formData) => async (dispatch, getState) => {
     const action = stopSubmit("profile", {
       // _error: data.messages[0],
       contacts,
-      // contacts: {
-      //   [field]: message,
-      // },
     });
     dispatch(action);
     return Promise.reject(data.messages[0]);

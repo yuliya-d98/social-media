@@ -59,3 +59,13 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.captchaImage {
+  display: block;
+  background-color: var(--color-light);
+  margin: 20px auto 10px;
+  width: 200px;
+  height: 100px;
+  max-width: 100%;
+  object-fit: contain;
+}
