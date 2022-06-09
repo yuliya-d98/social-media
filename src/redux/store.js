@@ -1,35 +1,35 @@
-import dialogsReducer from "./dialogs-reducer";
-import profileReducer from "./profile-reducer";
-import sidebarReducer from "./sidebar-reducer";
+import dialogsReducer from './dialogs-reducer';
+import profileReducer from './profile-reducer';
+import sidebarReducer from './sidebar-reducer';
 
 const store = {
   _state: {
     profilePage: {
       postsData: [
-        { id: 0, username: "Yuliya", message: "It's our new program! Hey!" },
-        { id: 1, username: "Yuliya", message: "Hello its me" },
-        { id: 2, username: "Yuliya", message: "Wow there are a lot of posts" },
+        { id: 0, username: 'Yuliya', message: "It's our new program! Hey!" },
+        { id: 1, username: 'Yuliya', message: 'Hello its me' },
+        { id: 2, username: 'Yuliya', message: 'Wow there are a lot of posts' },
       ],
-      newPostText: "it-kamasutra.com",
+      newPostText: 'it-kamasutra.com',
     },
     messagesPage: {
       dialogData: [
-        { id: 1, name: "Nikita" },
-        { id: 2, name: "Valera" },
-        { id: 3, name: "Sergey" },
+        { id: 1, name: 'Nikita' },
+        { id: 2, name: 'Valera' },
+        { id: 3, name: 'Sergey' },
       ],
       messageData: [
-        { id: 1, text: "Hey!" },
-        { id: 2, text: "Whats up?" },
-        { id: 3, text: "How you doing man?" },
+        { id: 1, text: 'Hey!' },
+        { id: 2, text: 'Whats up?' },
+        { id: 3, text: 'How you doing man?' },
       ],
-      newMessageText: "",
+      newMessageText: '',
     },
     sidebar: {},
   },
 
   _rerenderEntireTree() {
-    console.log("state has changed");
+    console.log('state has changed');
   },
 
   getState() {

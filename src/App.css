@@ -18,8 +18,8 @@ a {
 .container {
   display: grid;
   grid-template-areas:
-    "header header header"
-    "nav content content";
+    'header header header'
+    'nav content content';
   grid-template-rows: auto 1fr;
   grid-template-columns: 2fr 10fr;
   grid-gap: 10px;

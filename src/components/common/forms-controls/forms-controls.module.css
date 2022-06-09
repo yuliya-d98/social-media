@@ -51,7 +51,7 @@
 }
 
 .checkboxLabel::before {
-  content: "";
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;

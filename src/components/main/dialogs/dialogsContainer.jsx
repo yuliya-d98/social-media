@@ -5,21 +5,18 @@ import { sendMessageActionCreator } from '../../../redux/dialogs-reducer';
 import Dialogs from './dialogs';
 
 const mapStateToProps = (state) => {
-    return {
-        messagesPage: state.messagesPage,
-    }
-}
+  return {
+    messagesPage: state.messagesPage,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        sendMessage: (newMessage) => {
-            const action = sendMessageActionCreator(newMessage);
-            dispatch(action);
-        },
-    }
-}
+  return {
+    sendMessage: (newMessage) => {
+      const action = sendMessageActionCreator(newMessage);
+      dispatch(action);
+    },
+  };
+};
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    withAuthRedirect,
-)(Dialogs);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withAuthRedirect)(Dialogs);

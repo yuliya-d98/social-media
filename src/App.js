@@ -1,29 +1,23 @@
-import React, { Suspense } from "react";
-import { connect, Provider } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import React, { Suspense } from 'react';
+import { connect, Provider } from 'react-redux';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // for deploy
 // import { HashRouter, Route, Routes } from "react-router-dom";
-import { initializeApp } from "./redux/app-reducer";
-import "./App.css";
-import store from "./redux/redux-store";
+import { initializeApp } from './redux/app-reducer';
+import './App.css';
+import store from './redux/redux-store';
 
-import Preloader from "./components/common/preloader";
-import HeaderContainer from "./components/header/header-container";
-import Login from "./components/main/login/login";
-import Music from "./components/main/music/music";
-import News from "./components/main/news/news";
-import Settings from "./components/main/settings/settings";
-import Sidebar from "./components/sidebar/sidebar";
+import Preloader from './components/common/preloader';
+import HeaderContainer from './components/header/header-container';
+import Login from './components/main/login/login';
+import Music from './components/main/music/music';
+import News from './components/main/news/news';
+import Settings from './components/main/settings/settings';
+import Sidebar from './components/sidebar/sidebar';
 
-const ProfileContainer = React.lazy(() =>
-  import("./components/main/profile/profileContainer")
-);
-const DialogsContainer = React.lazy(() =>
-  import("./components/main/dialogs/dialogsContainer")
-);
-const UsersContainer = React.lazy(() =>
-  import("./components/main/users/usersContainer")
-);
+const ProfileContainer = React.lazy(() => import('./components/main/profile/profileContainer'));
+const DialogsContainer = React.lazy(() => import('./components/main/dialogs/dialogsContainer'));
+const UsersContainer = React.lazy(() => import('./components/main/users/usersContainer'));
 
 class App extends React.Component {
   catchAllRejectedErrors = (e) => {
@@ -33,14 +27,11 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.initializeApp();
-    window.addEventListener("unhandledrejection", this.catchAllRejectedErrors);
+    window.addEventListener('unhandledrejection', this.catchAllRejectedErrors);
   }
 
   componentWillUnmount() {
-    window.removeEventListener(
-      "unhandledrejection",
-      this.catchAllRejectedErrors
-    );
+    window.removeEventListener('unhandledrejection', this.catchAllRejectedErrors);
   }
 
   render() {
@@ -57,11 +48,7 @@ class App extends React.Component {
           <div className="content-container">
             <Suspense fallback={<Preloader />}>
               <Routes>
-                <Route
-                  exact
-                  path="/"
-                  element={<Navigate to="/profile" replace />}
-                />
+                <Route exact path="/" element={<Navigate to="/profile" replace />} />
                 <Route path="/profile" element={<ProfileContainer />}>
                   <Route path=":userId" element={<ProfileContainer />} />
                 </Route>
@@ -88,7 +75,7 @@ const mapStateToProps = (state) => ({
 
 const AppWithRouter = connect(mapStateToProps, { initializeApp })(App);
 
-const MainApp = (props) => {
+const MainApp = () => {
   return (
     <React.StrictMode>
       <Provider store={store}>
