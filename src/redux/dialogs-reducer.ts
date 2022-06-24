@@ -16,8 +16,9 @@ const initialState = {
 };
 
 type InitialStateType = typeof initialState;
+type ActionsTypes = SendMessageActionType;
 
-const dialogsReducer = (state = initialState, action: any): InitialStateType => {
+const dialogsReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
     case SEND_MESSAGE: {
       const newMessage = {

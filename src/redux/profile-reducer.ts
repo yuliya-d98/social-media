@@ -1,6 +1,9 @@
-import { stopSubmit } from 'redux-form';
+import { FormAction, stopSubmit } from 'redux-form';
+import { ThunkAction } from 'redux-thunk';
 import { profileAPI } from '../api/api';
+import { ResultCodesEnum } from '../types/api';
 import { PhotosType, PostType, ProfileType } from '../types/types';
+import { AppStateType } from './redux-store';
 
 const ADD_POST = 'profile/ADD-POST';
 const DELETE_POST = 'profile/DELETE_POST';
@@ -16,12 +19,19 @@ const initialState = {
     { id: 2, message: 'Wow there are a lot of posts' },
   ] as Array<PostType>,
   profile: null as ProfileType | null,
-  status: '',
+  status: '' as string | null,
 };
 
 type InitialStateType = typeof initialState;
+type ActionsTypes =
+  | AddPhotosActionType
+  | DeletePostActionType
+  | SetUserProfileActionType
+  | SetStatusActionType
+  | SetPhotoActionType
+  | SetProfileActionType;
 
-const profileReducer = (state = initialState, action: any): InitialStateType => {
+const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
     case ADD_POST:
       const newPost = {
@@ -84,10 +94,10 @@ export const setUserProfile = (userProfile: ProfileType): SetUserProfileActionTy
 
 type SetStatusActionType = {
   type: typeof SET_STATUS;
-  status: string;
+  status: string | null;
 };
 
-export const setStatus = (status: string): SetStatusActionType => ({
+export const setStatus = (status: string | null): SetStatusActionType => ({
   type: SET_STATUS,
   status: status,
 });
@@ -112,24 +122,38 @@ export const setProfile = (profile: ProfileType): SetProfileActionType => ({
   profile,
 });
 
-export const getStatus = (userId: number) => async (dispatch: any) => {
-  const data = await profileAPI.getStatus(userId);
-  dispatch(setStatus(data));
-};
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+type ThunkTypeWithForm = ThunkAction<
+  Promise<void>,
+  AppStateType,
+  unknown,
+  ActionsTypes | FormAction
+>;
 
-export const updateStatus = (status: string) => async (dispatch: any) => {
-  const data = await profileAPI.updateStatus(status);
-  if (data.resultCode === 0) {
-    dispatch(setStatus(status));
-  }
-};
+export const getStatus =
+  (userId: number): ThunkType =>
+  async (dispatch) => {
+    const data = await profileAPI.getStatus(userId);
+    dispatch(setStatus(data));
+  };
 
-export const savePhoto = (photo: any) => async (dispatch: any) => {
-  const data = await profileAPI.updatePhoto(photo);
-  if (data.resultCode === 0) {
-    dispatch(setPhoto(data.data.photos));
-  }
-};
+export const updateStatus =
+  (status: string | null): ThunkType =>
+  async (dispatch) => {
+    const data = await profileAPI.updateStatus(status);
+    if (data.resultCode === ResultCodesEnum.Success) {
+      dispatch(setStatus(status));
+    }
+  };
+
+export const savePhoto =
+  (photo: File): ThunkType =>
+  async (dispatch) => {
+    const data = await profileAPI.updatePhoto(photo);
+    if (data.resultCode === ResultCodesEnum.Success) {
+      dispatch(setPhoto(data.data.photos));
+    }
+  };
 
 const getInvalidField = (errorMessage: string): Array<string> => {
   const field = errorMessage.split('>')[1];
@@ -144,23 +168,25 @@ type ContactsErrorMessagesType = {
   [string: string]: string;
 };
 
-export const setProfileData = (formData: any) => async (dispatch: any, getState: any) => {
-  const userId = getState().auth.userId;
-  const data = await profileAPI.setProfile(userId, formData);
-  if (data.resultCode === 0) {
-    const profile = await profileAPI.getProfile(userId);
-    dispatch(setProfile(profile));
-  } else {
-    const contacts: ContactsErrorMessagesType = {};
-    for (let i = 0; i < data.messages.length; i += 1) {
-      const [field, message] = getInvalidField(data.messages[i]);
-      contacts[field] = message;
+export const setProfileData =
+  (formData: ProfileType): ThunkTypeWithForm =>
+  async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const data = await profileAPI.setProfile(formData);
+    if (data.resultCode === ResultCodesEnum.Success && userId) {
+      const profile = await profileAPI.getProfile(userId);
+      dispatch(setProfile(profile));
+    } else {
+      const contacts: ContactsErrorMessagesType = {};
+      for (let i = 0; i < data.messages.length; i += 1) {
+        const [field, message] = getInvalidField(data.messages[i]);
+        contacts[field] = message;
+      }
+      const action = stopSubmit('profile', {
+        // _error: data.messages[0],
+        contacts,
+      });
+      dispatch(action);
+      return Promise.reject(data.messages[0]);
     }
-    const action = stopSubmit('profile', {
-      // _error: data.messages[0],
-      contacts,
-    });
-    dispatch(action);
-    return Promise.reject(data.messages[0]);
-  }
-};
+  };

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import defaultAvatar from '../../../../assets/user-avatar.png';
+import { ProfileType } from '../../../../types/types';
 import Preloader from '../../../common/preloader';
 import formStyle from './../../../common/forms-controls/forms-controls.module.css';
 import ProfileDataForm from './profile-data-form';
@@ -9,7 +10,11 @@ import s from './user.module.css';
 
 // const bestAvatarEver = 'https://sib.fm/storage/article/April2021/Kb1KiTYol9I62IHiyBgV.jpeg';
 
-const UserLink = ({ href }) => {
+type UserLinkPropsType = {
+  href: string | null;
+};
+
+const UserLink: React.FC<UserLinkPropsType> = ({ href }) => {
   return (
     <i>
       {href ? (
@@ -23,10 +28,24 @@ const UserLink = ({ href }) => {
   );
 };
 
-const ProfileData = ({ profile, status, updateStatus, isOwner, toEditMode }) => {
+type ProfileDataPropsType = {
+  profile: ProfileType;
+  status: string | null;
+  isOwner: boolean;
+  updateStatus: (status: string | null) => Promise<void>;
+  toEditMode: () => void;
+};
+
+const ProfileData: React.FC<ProfileDataPropsType> = ({
+  profile,
+  status,
+  updateStatus,
+  isOwner,
+  toEditMode,
+}) => {
   return (
     <div>
-      <h2 className={s.header}>{profile.fullName}</h2>
+      <h2 className={s.header}>{profile.fullName || 'username'}</h2>
       <ProfileStatusWithHooks status={status} updateStatus={updateStatus} isOwner={isOwner} />
       <div className={s.aboutUser}>
         <p>
@@ -45,7 +64,7 @@ const ProfileData = ({ profile, status, updateStatus, isOwner, toEditMode }) => 
         <p>Contacts:</p>
         {Object.keys(profile.contacts).map((link) => (
           <p key={link}>
-            {link}: <UserLink href={profile.contacts[link]} />
+            {link}: <UserLink href={profile.contacts[link as keyof typeof profile.contacts]} />
           </p>
         ))}
       </div>
@@ -58,7 +77,23 @@ const ProfileData = ({ profile, status, updateStatus, isOwner, toEditMode }) => 
   );
 };
 
-const User = ({ profile, status, updateStatus, isOwner, savePhoto, setProfileData }) => {
+type UserPropsType = {
+  profile: ProfileType | null;
+  status: string | null;
+  isOwner: boolean;
+  updateStatus: (status: string | null) => Promise<void>;
+  savePhoto: (photo: File) => Promise<void>;
+  setProfileData: (profile: ProfileType) => Promise<void>;
+};
+
+const User: React.FC<UserPropsType> = ({
+  profile,
+  status,
+  updateStatus,
+  isOwner,
+  savePhoto,
+  setProfileData,
+}) => {
   const [editMode, setEditMode] = useState(false);
 
   const toEditMode = () => setEditMode(true);
@@ -69,13 +104,14 @@ const User = ({ profile, status, updateStatus, isOwner, savePhoto, setProfileDat
     return <Preloader />;
   }
 
-  const onMainPhotoSelected = (e) => {
-    if (e.target.files.length) {
+  const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length) {
       savePhoto(e.target.files[0]);
     }
   };
 
-  const onSubmit = (formData) => {
+  const onSubmit = (formData: ProfileType) => {
+    console.log('formData', formData);
     setProfileData(formData).then(() => fromEditMode());
   };
 

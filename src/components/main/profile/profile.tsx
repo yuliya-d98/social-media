@@ -2,8 +2,19 @@ import React from 'react';
 import s from './profile.module.css';
 import User from './user/user';
 import PostsContainer from './posts/postsContainer';
+import { ProfileType } from '../../../types/types';
 
-const Profile = (props) => {
+type PropsType = {
+  profile: ProfileType | null;
+  status: string | null;
+  isOwner: boolean;
+
+  updateStatus: (status: string | null) => Promise<void>;
+  savePhoto: (photo: File) => Promise<void>;
+  setProfileData: (profile: ProfileType) => Promise<void>;
+};
+
+const Profile = (props: PropsType) => {
   return (
     <main className={s.content}>
       <User

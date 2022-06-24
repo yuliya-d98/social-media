@@ -1,5 +1,8 @@
-import { stopSubmit } from 'redux-form';
+import { FormAction, stopSubmit } from 'redux-form';
+import { ThunkAction } from 'redux-thunk';
 import { authAPI, securityAPI } from '../api/api';
+import { ResultCodesEnum, ResultCodesWithCaptchaEnum } from '../types/api';
+import { AppStateType } from './redux-store';
 
 const SET_USER_DATA = 'auth/SET_USER_DATA';
 const SET_CAPTCHA_URL = 'auth/SET_CAPTCHA_URL';
@@ -14,8 +17,9 @@ const initialState = {
 };
 
 export type InitialStateType = typeof initialState;
+type ActionsType = SetAuthUserDataType | SetCaptchaUrlType;
 
-const authReducer = (state = initialState, action: any): InitialStateType => {
+const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
   switch (action.type) {
     case SET_USER_DATA:
       return {
@@ -71,9 +75,17 @@ export const setCaptchaUrl = (captchaUrl: string): SetCaptchaUrlType => ({
   captchaUrl,
 });
 
-export const getAuthInfoThunkCreator = () => async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsType>;
+type ThunkTypeWithForm = ThunkAction<
+  Promise<void>,
+  AppStateType,
+  unknown,
+  ActionsType | FormAction
+>;
+
+export const getAuthInfoThunkCreator = (): ThunkType => async (dispatch) => {
   const data = await authAPI.me();
-  if (data.resultCode === 0) {
+  if (data.resultCode === ResultCodesEnum.Success) {
     const { id, email, login } = data.data;
     dispatch(setAuthUserData(id, email, login, true));
   }
@@ -81,33 +93,33 @@ export const getAuthInfoThunkCreator = () => async (dispatch: any) => {
 };
 
 export const login =
-  (email: string, password: string, captcha: string, rememberMe: boolean) =>
-  async (dispatch: any) => {
+  (email: string, password: string, captcha: string, rememberMe: boolean): ThunkTypeWithForm =>
+  async (dispatch) => {
     const data = await authAPI.login(email, password, captcha, rememberMe);
-    if (data.resultCode === 0) {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(getAuthInfoThunkCreator());
-    } else if (data.resultCode === 1) {
+    } else if (data.resultCode === ResultCodesEnum.Error) {
       const errorText = data.messages.length ? data.messages[0] : 'Incorrect Email or Password';
       const action = stopSubmit('login', {
         _error: errorText,
       });
       dispatch(action);
-    } else if (data.resultCode === 10) {
+    } else if (data.resultCode === ResultCodesWithCaptchaEnum.CaptchaIsRequired) {
       dispatch(getCaptchaUrl());
     } else {
       alert(data.resultCode + ' ' + data.messages[0]);
     }
   };
 
-export const getCaptchaUrl = () => async (dispatch: any) => {
+export const getCaptchaUrl = (): ThunkType => async (dispatch) => {
   const data = await securityAPI.getCaptchaURL();
   const captchaUrl = data.url;
   dispatch(setCaptchaUrl(captchaUrl));
 };
 
-export const logout = () => async (dispatch: any) => {
-  const data = authAPI.logout();
-  if (data.resultCode === 0) {
+export const logout = (): ThunkType => async (dispatch) => {
+  const data = await authAPI.logout();
+  if (data.resultCode === ResultCodesEnum.Success) {
     dispatch(setAuthUserData(null, null, null, false));
   }
 };

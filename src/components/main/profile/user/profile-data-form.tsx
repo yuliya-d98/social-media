@@ -1,23 +1,36 @@
-import { useState } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { ChangeEvent, useState } from 'react';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form';
+import { ProfileType } from '../../../../types/types';
 import { required } from '../../../../utils/validators/validators';
 import { Input, Textarea } from '../../../common/forms-controls/forms-controls';
 import formStyle from './../../../common/forms-controls/forms-controls.module.css';
 import s from './profile-data-form.module.css';
 
-const Contact = ({ contact }) => {
+type ContactPropsType = {
+  contact: string;
+};
+
+const Contact = ({ contact }: ContactPropsType) => {
   return (
-    <div key={contact} className={s.link}>
+    <div className={s.link}>
       <label htmlFor={contact} className={s.label}>{`${contact}: `}</label>
       <Field component={Input} type="text" id={contact} name={'contacts.' + contact} />
     </div>
   );
 };
 
-const ProfileDataForm = ({ handleSubmit, error, profile }) => {
+type ProfileFormOwnPropsType = {
+  profile: ProfileType;
+  initialValues: ProfileType;
+  fromEditMode: () => void;
+};
+
+type FormType = InjectedFormProps<ProfileType, ProfileFormOwnPropsType> & ProfileFormOwnPropsType;
+
+const ProfileDataForm = ({ handleSubmit, error, profile }: FormType) => {
   const [checked, setChecked] = useState(false);
 
-  const onCheckboxChange = (e) => {
+  const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checkbox = e.target;
     setChecked(checkbox.checked);
   };
@@ -60,7 +73,7 @@ const ProfileDataForm = ({ handleSubmit, error, profile }) => {
       )}
       <p className={s.paragraph}>Contacts:</p>
       {Object.keys(profile.contacts).map((link) => (
-        <Contact contact={link} />
+        <Contact contact={link} key={link} />
       ))}
       {error && <p className={formStyle.formSummaryError}>{error}</p>}
       <button className={formStyle.button}>Save</button>
@@ -68,6 +81,6 @@ const ProfileDataForm = ({ handleSubmit, error, profile }) => {
   );
 };
 
-export default reduxForm({
+export default reduxForm<ProfileType, ProfileFormOwnPropsType>({
   form: 'profile',
 })(ProfileDataForm);

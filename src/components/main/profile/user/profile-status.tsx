@@ -4,7 +4,7 @@ import s from './profile-status.module.css';
 type PropsType = {
   status: string;
 
-  updateStatus: (status: string) => void;
+  updateStatus: (status: string | null) => Promise<void>;
 };
 
 type LocalStateType = {
