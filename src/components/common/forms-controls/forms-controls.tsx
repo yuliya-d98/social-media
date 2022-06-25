@@ -1,61 +1,27 @@
 import clsx from 'clsx';
+// import { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import { WrappedFieldProps } from 'redux-form';
-// import { FieldValidatorType } from '../../../utils/validators/validators';
 import s from './forms-controls.module.css';
 
-// type ComponentType = ReturnType<typeof Input>;
-
-// const FormControl: React.FC<React.ComponentType<OwnPropsType> | string> =
-//   (Element): React.FC<WrappedFieldProps & OwnPropsType> =>
-//   ({ input, meta: { touched, error }, ...props }) => {
-//     const hasError = touched && error;
-//     return (
-//       <div className={clsx(s.formControl, hasError && s.error)}>
-//         <Element className={s[Element.toString()]} {...props} {...input} value={input.value} />
-//         {hasError && <span>{error}</span>}
-//       </div>
-//     );
-//   };
+// GenericFieldHTMLAttributes
+// type Attributes = {
+//   input: InputHTMLAttributes<HTMLInputElement>;
+//   select: SelectHTMLAttributes<HTMLSelectElement>;
+//   textarea: TextareaHTMLAttributes<HTMLTextAreaElement>;
+// };
 
 const FormControl =
-  (Element: 'input' | 'textarea') =>
-  // (Element: string): React.FC<FormPropsType & OwnPropsType> =>
-  ({ input, meta: { touched, error } }: WrappedFieldProps) => {
+  (TagName: 'input' | 'textarea' | 'select') =>
+  ({ input, meta: { touched, error }, ...rest }: WrappedFieldProps & unknown) => {
+    // ({ input, meta: { touched, error }, ...rest }: WrappedFieldProps & Attributes[TagName]) => {
     const hasError = touched && error;
-    // const value = input.value;
     return (
       <div className={clsx(s.formControl, hasError && s.error)}>
-        <Element className={s[Element]} {...input} />
+        <TagName className={s[TagName]} {...input} {...rest} />
         {hasError && <span>{error}</span>}
       </div>
     );
   };
-// const FormControl =
-//   (Element: string | Component<FieldProps>) =>
-//   // (Element: string): React.FC<FormPropsType & OwnPropsType> =>
-//   ({ input, meta: { touched, error }, ...props }: WrappedFieldProps) => {
-//     const hasError = touched && error;
-//     // const value = input.value;
-//     return (
-//       <div className={clsx(s.formControl, hasError && s.error)}>
-//         <Element className={s[Element]} {...props} {...input} />
-//         {hasError && <span>{error}</span>}
-//       </div>
-//     );
-//   };
-
-// const FormControl =
-//   (Element: string): React.FC<FormPropsType & OwnPropsType> =>
-//   ({ input, meta: { touched, error }, ...props }) => {
-//     const hasError = touched && error;
-//     // const value = input.value;
-//     return (
-//       <div className={clsx(s.formControl, hasError && s.error)}>
-//         <Element className={s[Element]} {...props} {...input} />
-//         {hasError && <span>{error}</span>}
-//       </div>
-//     );
-//   };
 
 export const Textarea = FormControl('textarea');
 
