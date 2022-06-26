@@ -1,10 +1,10 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { Action, applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import authReducer from './auth-reducer';
 import dialogsReducer from './dialogs-reducer';
 import profileReducer from './profile-reducer';
 import sidebarReducer from './sidebar-reducer';
 import usersReducer from './users-reducer';
-import thunkMiddleware from 'redux-thunk';
+import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 import { reducer as formReducer } from 'redux-form';
 import appReducer from './app-reducer';
 
@@ -23,6 +23,13 @@ const rootReducer = combineReducers({
 
 type RootReducerType = typeof rootReducer;
 export type AppStateType = ReturnType<RootReducerType>;
+// type GetStateType = () => AppStateType;
+export type BaseThunkType<A extends Action = Action, R = Promise<void>> = ThunkAction<
+  R,
+  AppStateType,
+  unknown,
+  A
+>;
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
@@ -30,3 +37,14 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMid
 window.__store__ = store;
 
 export default store;
+
+// type PropertiesTypes<T> = T extends { [key: string]: infer U } ? U : never;
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// export type InferActionsTypes<T extends { [key: string]: (...args: any[]) => any }> = ReturnType<
+//   PropertiesTypes<T>
+// >;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InferActionsTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U }
+  ? U
+  : never;

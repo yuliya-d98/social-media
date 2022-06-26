@@ -14,7 +14,7 @@ type PropsType = {
   setProfileData: (profile: ProfileType) => Promise<void>;
 };
 
-const Profile = (props: PropsType) => {
+const Profile: React.FC<PropsType> = (props) => {
   return (
     <main className={s.content}>
       <User

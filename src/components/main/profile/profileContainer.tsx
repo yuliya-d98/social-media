@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Navigate, PathMatch, useMatch } from 'react-router-dom';
 import { compose } from 'redux';
-import { profileAPI } from '../../../api/api';
+import { profileAPI } from '../../../api/profileAPI';
 import {
   getStatus,
-  setUserProfile,
+  actions,
   updateStatus,
   savePhoto,
   setProfileData,
@@ -82,7 +82,9 @@ export const withRouter = (Component: typeof ProfileContainer) => {
   return RouterComponent;
 };
 
-export default compose(
+const setUserProfile = actions.setUserProfile;
+
+export default compose<React.ComponentType>(
   connect(mapStateToProps, { setUserProfile, getStatus, updateStatus, savePhoto, setProfileData }),
   withRouter
   // withAuthRedirect

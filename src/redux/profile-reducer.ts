@@ -1,16 +1,8 @@
 import { FormAction, stopSubmit } from 'redux-form';
-import { ThunkAction } from 'redux-thunk';
-import { profileAPI } from '../api/api';
+import { profileAPI } from '../api/profileAPI';
 import { ResultCodesEnum } from '../types/api';
 import { PhotosType, PostType, ProfileType } from '../types/types';
-import { AppStateType } from './redux-store';
-
-const ADD_POST = 'profile/ADD-POST';
-const DELETE_POST = 'profile/DELETE_POST';
-const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
-const SET_STATUS = 'profile/SET_STATUS';
-const SET_PHOTO = 'profile/SET_PHOTO';
-const SET_PROFILE = 'profile/SET_PROFILE';
+import { BaseThunkType, InferActionsTypes } from './redux-store';
 
 const initialState = {
   postsData: [
@@ -23,17 +15,11 @@ const initialState = {
 };
 
 type InitialStateType = typeof initialState;
-type ActionsTypes =
-  | AddPhotosActionType
-  | DeletePostActionType
-  | SetUserProfileActionType
-  | SetStatusActionType
-  | SetPhotoActionType
-  | SetProfileActionType;
+type ActionsTypes = InferActionsTypes<typeof actions>;
 
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
-    case ADD_POST:
+    case 'profile/ADD-POST':
       const newPost = {
         id: state.postsData.length,
         message: action.newPostText,
@@ -42,18 +28,18 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
         ...state,
         postsData: [newPost, ...state.postsData],
       };
-    case DELETE_POST:
+    case 'profile/DELETE_POST':
       return {
         ...state,
         postsData: [...state.postsData].filter((post) => post.id !== action.postId),
       };
-    case SET_USER_PROFILE:
+    case 'profile/SET_USER_PROFILE':
       return { ...state, profile: action.userProfile };
-    case SET_STATUS:
+    case 'profile/SET_STATUS':
       return { ...state, status: action.status };
-    case SET_PHOTO:
+    case 'profile/SET_PHOTO':
       return { ...state, profile: { ...(state.profile as ProfileType), photos: action.photos } };
-    case SET_PROFILE:
+    case 'profile/SET_PROFILE':
       return { ...state, profile: action.profile };
     default:
       return state;
@@ -62,79 +48,52 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
 
 export default profileReducer;
 
-type AddPhotosActionType = {
-  type: typeof ADD_POST;
-  newPostText: string;
+export const actions = {
+  addPostActionCreator: (newPostText: string) =>
+    ({
+      type: 'profile/ADD-POST',
+      newPostText,
+    } as const),
+
+  deletePost: (postId: number) =>
+    ({
+      type: 'profile/DELETE_POST',
+      postId,
+    } as const),
+
+  setUserProfile: (userProfile: ProfileType) =>
+    ({
+      type: 'profile/SET_USER_PROFILE',
+      userProfile,
+    } as const),
+
+  setStatus: (status: string | null) =>
+    ({
+      type: 'profile/SET_STATUS',
+      status: status,
+    } as const),
+
+  setPhoto: (photos: PhotosType) =>
+    ({
+      type: 'profile/SET_PHOTO',
+      photos,
+    } as const),
+
+  setProfile: (profile: ProfileType) =>
+    ({
+      type: 'profile/SET_PROFILE',
+      profile,
+    } as const),
 };
 
-export const addPostActionCreator = (newPostText: string): AddPhotosActionType => ({
-  type: ADD_POST,
-  newPostText,
-});
-
-type DeletePostActionType = {
-  type: typeof DELETE_POST;
-  postId: number;
-};
-
-export const deletePost = (postId: number): DeletePostActionType => ({
-  type: DELETE_POST,
-  postId,
-});
-
-type SetUserProfileActionType = {
-  type: typeof SET_USER_PROFILE;
-  userProfile: ProfileType;
-};
-
-export const setUserProfile = (userProfile: ProfileType): SetUserProfileActionType => ({
-  type: SET_USER_PROFILE,
-  userProfile,
-});
-
-type SetStatusActionType = {
-  type: typeof SET_STATUS;
-  status: string | null;
-};
-
-export const setStatus = (status: string | null): SetStatusActionType => ({
-  type: SET_STATUS,
-  status: status,
-});
-
-type SetPhotoActionType = {
-  type: typeof SET_PHOTO;
-  photos: PhotosType;
-};
-
-export const setPhoto = (photos: PhotosType): SetPhotoActionType => ({
-  type: SET_PHOTO,
-  photos,
-});
-
-type SetProfileActionType = {
-  type: typeof SET_PROFILE;
-  profile: ProfileType;
-};
-
-export const setProfile = (profile: ProfileType): SetProfileActionType => ({
-  type: SET_PROFILE,
-  profile,
-});
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
-type ThunkTypeWithForm = ThunkAction<
-  Promise<void>,
-  AppStateType,
-  unknown,
-  ActionsTypes | FormAction
->;
+type ThunkType = BaseThunkType<ActionsTypes>;
+type ThunkTypeWithForm = BaseThunkType<ActionsTypes | FormAction>;
 
 export const getStatus =
   (userId: number): ThunkType =>
   async (dispatch) => {
     const data = await profileAPI.getStatus(userId);
-    dispatch(setStatus(data));
+    dispatch(actions.setStatus(data));
   };
 
 export const updateStatus =
@@ -142,7 +101,7 @@ export const updateStatus =
   async (dispatch) => {
     const data = await profileAPI.updateStatus(status);
     if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(setStatus(status));
+      dispatch(actions.setStatus(status));
     }
   };
 
@@ -151,7 +110,7 @@ export const savePhoto =
   async (dispatch) => {
     const data = await profileAPI.updatePhoto(photo);
     if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(setPhoto(data.data.photos));
+      dispatch(actions.setPhoto(data.data.photos));
     }
   };
 
@@ -175,7 +134,7 @@ export const setProfileData =
     const data = await profileAPI.setProfile(formData);
     if (data.resultCode === ResultCodesEnum.Success && userId) {
       const profile = await profileAPI.getProfile(userId);
-      dispatch(setProfile(profile));
+      dispatch(actions.setProfile(profile));
     } else {
       const contacts: ContactsErrorMessagesType = {};
       for (let i = 0; i < data.messages.length; i += 1) {

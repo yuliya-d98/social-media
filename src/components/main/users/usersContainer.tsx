@@ -75,7 +75,7 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => {
   };
 };
 
-export default compose(
+export default compose<React.ComponentType>(
   // withAuthRedirect,
   connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(mapStateToProps, {
     follow: followThunkCreator,

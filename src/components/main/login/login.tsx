@@ -133,8 +133,4 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
   captchaUrl: state.auth.captchaUrl,
 });
 
-// type MapDispatchToPropsType = {
-//   login: (email: string, password: string, captcha: string, rememberMe: boolean) => void;
-// };
-
 export default connect(mapStateToProps, { login })(Login);

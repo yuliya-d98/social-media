@@ -1,13 +1,15 @@
-import profileReducer, { addPostActionCreator, deletePost } from './profile-reducer';
+import profileReducer, { actions } from './profile-reducer';
 
 // 1. test data
-const action = addPostActionCreator('it-kamasutra.com');
+const action = actions.addPostActionCreator('it-kamasutra.com');
 const state = {
   postsData: [
-    { id: 0, username: 'Yuliya', message: "It's our new program! Hey!" },
-    { id: 1, username: 'Yuliya', message: 'Hello its me' },
-    { id: 2, username: 'Yuliya', message: 'Wow there are a lot of posts' },
+    { id: 0, message: "It's our new program! Hey!" },
+    { id: 1, message: 'Hello its me' },
+    { id: 2, message: 'Wow there are a lot of posts' },
   ],
+  profile: null,
+  status: '',
 };
 
 test('length of posts should be incremented', () => {
@@ -27,7 +29,7 @@ test('message of new post should be correct', () => {
 });
 
 test('after deleting length of posts should be decremented', () => {
-  const action = deletePost(1);
+  const action = actions.deletePost(1);
   // 2. action
   const newState = profileReducer(state, action);
 
@@ -36,7 +38,7 @@ test('after deleting length of posts should be decremented', () => {
 });
 
 test("if writing incorrect post id length of posts doesn't change", () => {
-  const action = deletePost(999999);
+  const action = actions.deletePost(999999);
   // 2. action
   const newState = profileReducer(state, action);
 

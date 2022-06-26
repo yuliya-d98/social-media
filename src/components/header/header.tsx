@@ -2,7 +2,13 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import s from './header.module.css';
 
-const Header = (props) => {
+type HeaderPropsType = {
+  isAuth: boolean;
+  login: string | null;
+  logout: () => Promise<void>;
+};
+
+const Header = (props: HeaderPropsType) => {
   return (
     <header className={s.header}>
       <h1>Social Network</h1>

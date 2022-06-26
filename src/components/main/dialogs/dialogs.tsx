@@ -1,6 +1,7 @@
 import React from 'react';
-import { reduxForm } from 'redux-form';
+import { InjectedFormProps, reduxForm } from 'redux-form';
 import { Field } from 'redux-form';
+import { InitialStateType } from '../../../redux/dialogs-reducer';
 import { maxLengthCreator, required } from '../../../utils/validators/validators';
 import { Textarea } from '../../common/forms-controls/forms-controls';
 import DialogItem from './dialogItem/dialogItem';
@@ -9,7 +10,18 @@ import MessageItem from './messageItem/messageItem';
 
 const maxLength400 = maxLengthCreator(400);
 
-const AddMessageForm = (props) => {
+type AddMessageFormData = {
+  newMessage: string;
+};
+
+type AddMessageFormOwnPropsType = {
+  messagesPage: InitialStateType;
+};
+
+type FormType = InjectedFormProps<AddMessageFormData, AddMessageFormOwnPropsType> &
+  AddMessageFormOwnPropsType;
+
+const AddMessageForm = (props: FormType) => {
   return (
     <form onSubmit={props.handleSubmit}>
       <Field
@@ -17,7 +29,7 @@ const AddMessageForm = (props) => {
         validate={[required, maxLength400]}
         name="newMessage"
         className={s.newMessage}
-        value={props.messagesPage.newMessageText}
+        // value={props.messagesPage.newMessageText}
         placeholder="write your message..."
         rows="5"
       />
@@ -26,9 +38,16 @@ const AddMessageForm = (props) => {
   );
 };
 
-const AddMessageReduxForm = reduxForm({ form: 'dialogAddMessageForm' })(AddMessageForm);
+const AddMessageReduxForm = reduxForm<AddMessageFormData, AddMessageFormOwnPropsType>({
+  form: 'dialogAddMessageForm',
+})(AddMessageForm);
 
-const Dialogs = (props) => {
+type PropsType = {
+  messagesPage: InitialStateType;
+  sendMessage: (message: string) => void;
+};
+
+const Dialogs = (props: PropsType) => {
   const dialogItems = props.messagesPage.dialogData.map((dialog) => (
     <DialogItem name={dialog.name} id={dialog.id} key={dialog.id} />
   ));
@@ -36,7 +55,7 @@ const Dialogs = (props) => {
     <MessageItem text={message.text} key={index} />
   ));
 
-  const addNewMessage = (values) => {
+  const addNewMessage = (values: { newMessage: string }) => {
     props.sendMessage(values.newMessage);
   };
 

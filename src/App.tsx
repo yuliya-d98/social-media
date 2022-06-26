@@ -3,9 +3,9 @@ import { connect, Provider } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // for deploy
 // import { HashRouter, Route, Routes } from "react-router-dom";
-import { initializeApp } from './redux/app-reducer';
 import './App.css';
-import store from './redux/redux-store';
+import { initializeApp } from './redux/app-reducer';
+import store, { AppStateType } from './redux/redux-store';
 
 import Preloader from './components/common/preloader';
 import HeaderContainer from './components/header/header-container';
@@ -19,8 +19,13 @@ const ProfileContainer = React.lazy(() => import('./components/main/profile/prof
 const DialogsContainer = React.lazy(() => import('./components/main/dialogs/dialogsContainer'));
 const UsersContainer = React.lazy(() => import('./components/main/users/usersContainer'));
 
-class App extends React.Component {
-  catchAllRejectedErrors = (e) => {
+type MapPropsType = ReturnType<typeof mapStateToProps>;
+type DispatchPropsType = {
+  initializeApp: () => void;
+};
+
+class App extends React.Component<MapPropsType & DispatchPropsType> {
+  catchAllRejectedErrors = (e: PromiseRejectionEvent) => {
     console.log(e);
     alert(e.reason.message);
   };
@@ -48,7 +53,8 @@ class App extends React.Component {
           <div className="content-container">
             <Suspense fallback={<Preloader />}>
               <Routes>
-                <Route exact path="/" element={<Navigate to="/profile" replace />} />
+                <Route path="/" element={<Navigate to="/profile" replace />} />
+                {/* <Route path="/" element={<Navigate to="/profile" replace />} /> */}
                 <Route path="/profile" element={<ProfileContainer />}>
                   <Route path=":userId" element={<ProfileContainer />} />
                 </Route>
@@ -69,7 +75,7 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   initialized: state.app.initialized,
 });
 

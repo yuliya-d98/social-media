@@ -2,7 +2,13 @@ import React from 'react';
 import s from './post.module.css';
 import defaultAvatar from '../../../../../assets/user-avatar.png';
 
-const Post = (props) => {
+type PostPropsType = {
+  message: string;
+  username: string | null;
+  photo: string | null;
+};
+
+const Post = (props: PostPropsType) => {
   return (
     <div className={s.post}>
       <img className={s.avatar} src={props.photo || defaultAvatar} alt="user" />

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { addPostActionCreator as addPost } from '../../../../redux/profile-reducer';
+import { actions } from '../../../../redux/profile-reducer';
 import { AppStateType } from '../../../../redux/redux-store';
 import Posts from './posts';
 
@@ -18,6 +18,8 @@ type OwnPropsType = {
   username: string | null;
   photo: string | null;
 };
+
+const addPost = actions.addPostActionCreator;
 
 const PostsContainer = connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(
   mapStateToProps,
