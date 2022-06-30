@@ -15,10 +15,10 @@ const initialState = {
   followingInProgress: [] as Array<number>, // array of userId's
 };
 
-type InitialStateType = typeof initialState;
+export type InitialStateType = typeof initialState;
 type ActionsTypes = InferActionsTypes<typeof actions>;
 
-const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
+export const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
   switch (action.type) {
     case 'users/FOLLOW':
       return {

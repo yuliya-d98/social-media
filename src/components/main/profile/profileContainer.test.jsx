@@ -5,7 +5,7 @@ describe('profileStatus component', () => {
   test('status from props should be in the state', () => {
     const component = create(<ProfileStatus status="hello" />);
     const instance = component.getInstance();
-    expect(instance.state.status).toBe('hello');
+    expect(instance?.state?.status).toBe('hello');
   });
   test('after creation paragraph should be displayed', () => {
     const component = create(<ProfileStatus status="hello" />);
@@ -38,7 +38,7 @@ describe('profileStatus component', () => {
     const mockCallback = jest.fn();
     const component = create(<ProfileStatus status="hello" updateStatus={mockCallback} />);
     const instance = component.getInstance();
-    instance.deactivateEditMode();
+    instance?.deactivateEditMode();
     expect(mockCallback.mock.calls.length).toBe(1);
   });
 });
