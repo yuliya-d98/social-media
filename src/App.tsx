@@ -9,15 +9,15 @@ import store, { AppStateType } from './redux/redux-store';
 
 import Preloader from './components/common/preloader';
 import HeaderContainer from './components/header/header-container';
-import Login from './components/main/login/login';
 import Music from './components/main/music/music';
 import News from './components/main/news/news';
 import Settings from './components/main/settings/settings';
 import Sidebar from './components/sidebar/sidebar';
+import { LoginPage } from './components/main/login/login';
 
 const ProfileContainer = React.lazy(() => import('./components/main/profile/profileContainer'));
 const DialogsContainer = React.lazy(() => import('./components/main/dialogs/dialogsContainer'));
-const UsersContainer = React.lazy(() => import('./components/main/users/usersContainer'));
+const UsersPage = React.lazy(() => import('./components/main/users/usersContainer'));
 
 type MapPropsType = ReturnType<typeof mapStateToProps>;
 type DispatchPropsType = {
@@ -62,8 +62,8 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
                 <Route path="/news" element={<News />} />
                 <Route path="/music" element={<Music />} />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/users" element={<UsersContainer />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/users" element={<UsersPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="*" element={<div>404 NOT FOUND</div>} />
               </Routes>
             </Suspense>
