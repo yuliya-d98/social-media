@@ -13,9 +13,14 @@ const initialState = {
   currentPage: 1,
   isFetching: false,
   followingInProgress: [] as Array<number>, // array of userId's
+  filter: {
+    term: '',
+    friend: null as boolean | null,
+  },
 };
 
 export type InitialStateType = typeof initialState;
+export type FilterType = typeof initialState.filter;
 type ActionsTypes = InferActionsTypes<typeof actions>;
 
 export const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -38,6 +43,8 @@ export const usersReducer = (state = initialState, action: ActionsTypes): Initia
       return { ...state, usersData: action.users };
     case 'users/SET_CURRENT_PAGE':
       return { ...state, currentPage: action.currentPage };
+    case 'users/SET_FILTER':
+      return { ...state, filter: action.payload };
     case 'users/SET_TOTAL_USERS_COUNT':
       return { ...state, totalUsersCount: action.totalUsersCount };
     case 'users/TOGGLE_IS_FETCHING':
@@ -81,6 +88,12 @@ export const actions = {
       currentPage: currentPage,
     } as const),
 
+  setFilter: (filter: FilterType) =>
+    ({
+      type: 'users/SET_FILTER',
+      payload: filter,
+    } as const),
+
   setTotalUsersCount: (totalUsersCount: number) =>
     ({
       type: 'users/SET_TOTAL_USERS_COUNT',
@@ -107,13 +120,14 @@ type DispatchType = Dispatch<ActionsTypes>;
 type ThunkType = BaseThunkType<ActionsTypes>;
 
 export const getUsersThunkCreator =
-  (pageNumber: number, pageSize: number) => async (dispatch: DispatchType) => {
+  (pageNumber: number, pageSize: number, filter: FilterType) => async (dispatch: DispatchType) => {
     dispatch(actions.toggleIsFetching(true));
-    const data = await usersAPI.getUsers(pageNumber, pageSize);
+    const data = await usersAPI.getUsers(pageNumber, pageSize, filter.term, filter.friend);
     dispatch(actions.toggleIsFetching(false));
     dispatch(actions.setUsers(data.items));
     dispatch(actions.setTotalUsersCount(data.totalCount));
     dispatch(actions.setCurrentPage(pageNumber));
+    dispatch(actions.setFilter(filter));
   };
 
 const followUnfollowFlow = async (

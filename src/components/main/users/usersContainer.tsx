@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { AppStateType } from '../../../redux/redux-store';
 import {
+  FilterType,
   followThunkCreator,
   getUsersThunkCreator,
   unfollowThunkCreator,
@@ -14,6 +15,7 @@ import {
   getPageSize,
   getTotalUsersCount,
   getUsersData,
+  getUsersFilter,
 } from '../../../redux/users-selectors';
 import { UserType } from '../../../types/types';
 import Users from './users';
@@ -25,10 +27,11 @@ type MapStatePropsType = {
   users: Array<UserType>;
   isFetching: boolean;
   followingInProgress: Array<number>;
+  filter: FilterType;
 };
 
 type MapDispatchPropsType = {
-  getUsers: (currentPage: number, pageSize: number) => void;
+  getUsers: (currentPage: number, pageSize: number, filter: FilterType) => void;
   follow: (userId: number) => void;
   unfollow: (userId: number) => void;
 };
@@ -39,12 +42,16 @@ type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType;
 
 class UsersContainer extends React.Component<PropsType> {
   componentDidMount() {
-    const { currentPage, pageSize } = this.props;
-    this.props.getUsers(currentPage, pageSize);
+    const { currentPage, pageSize, filter } = this.props;
+    this.props.getUsers(currentPage, pageSize, filter);
   }
 
   onPageChanged = (pageNumber: number) => {
-    this.props.getUsers(pageNumber, this.props.pageSize);
+    this.props.getUsers(pageNumber, this.props.pageSize, this.props.filter);
+  };
+
+  onFilterChanged = (filter: FilterType) => {
+    this.props.getUsers(1, this.props.pageSize, filter);
   };
 
   render() {
@@ -54,6 +61,7 @@ class UsersContainer extends React.Component<PropsType> {
         pageSize={this.props.pageSize}
         currentPage={this.props.currentPage}
         onPageChanged={this.onPageChanged}
+        onFilterChanged={this.onFilterChanged}
         users={this.props.users}
         follow={this.props.follow}
         unfollow={this.props.unfollow}
@@ -70,6 +78,7 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => {
     pageSize: getPageSize(state),
     totalUsersCount: getTotalUsersCount(state),
     currentPage: getCurrentPage(state),
+    filter: getUsersFilter(state),
     isFetching: getIsFetching(state),
     followingInProgress: getFollowingInProgress(state),
   };

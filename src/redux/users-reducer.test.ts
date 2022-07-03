@@ -43,6 +43,10 @@ beforeEach(() => {
     currentPage: 1,
     isFetching: false,
     followingInProgress: [], // array of userId's
+    filter: {
+      term: '',
+      friend: null,
+    },
   };
 });
 
