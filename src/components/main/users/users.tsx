@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import defaultAvatar from '../../../assets/user-avatar.png';
 import {
   FilterType,
@@ -22,6 +23,13 @@ import User from './user';
 import s from './users.module.css';
 import UsersSearchForm from './usersSearchForm';
 
+// function useQuery() {
+//   return new URLSearchParams(useLocation().search);
+// }
+// const userId = query.get("userId")
+
+// useNavigate & useSearchParams
+
 export const Users: React.FC = () => {
   const totalUsersCount = useSelector(getTotalUsersCount);
   const pageSize = useSelector(getPageSize);
@@ -32,10 +40,61 @@ export const Users: React.FC = () => {
   const followingInProgress = useSelector(getFollowingInProgress);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    dispatch(getUsersThunkCreator(currentPage, pageSize, filter));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    debugger;
+    const params = new URLSearchParams({
+      page: currentPage.toString(),
+      count: pageSize.toString(),
+      // ...(currentPage != 1 && { page: currentPage.toString() }),
+      // ...(pageSize != 10 && { count: pageSize.toString() }),
+      ...(filter.term && { term: filter.term }),
+      ...(typeof filter.friend === 'boolean' && { friend: filter.friend.toString() }),
+    });
+    navigate(`/users?${params.toString()}`);
+  }, [filter, currentPage, pageSize]);
+
+  useEffect(() => {
+    debugger;
+    const search = location.search;
+    const params = new URLSearchParams(search);
+
+    let actualCurrentPage = currentPage;
+    const paramsCurrentPage = params.get('page');
+    if (paramsCurrentPage) {
+      actualCurrentPage = +paramsCurrentPage;
+    }
+
+    let actualPageSize = pageSize;
+    const paramsPageSize = params.get('count');
+    if (paramsPageSize) {
+      actualPageSize = +paramsPageSize;
+    }
+
+    let actualFilterTerm = filter.term;
+    const paramsTerm = params.get('term');
+    if (paramsTerm) {
+      actualFilterTerm = paramsTerm;
+    }
+
+    let actualFilterFriend = filter.friend;
+    const paramsFriend = params.get('friend');
+    switch (paramsFriend) {
+      case 'true':
+        actualFilterFriend = true;
+        break;
+      case 'false':
+        actualFilterFriend = false;
+        break;
+    }
+
+    const actualFilter: FilterType = {
+      term: actualFilterTerm,
+      friend: actualFilterFriend,
+    };
+    dispatch(getUsersThunkCreator(actualCurrentPage, actualPageSize, actualFilter));
   }, []); // [] - componentDidMount
 
   const onPageChanged = (pageNumber: number) => {
