@@ -44,7 +44,6 @@ export const Users: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    debugger;
     const params = new URLSearchParams({
       page: currentPage.toString(),
       count: pageSize.toString(),

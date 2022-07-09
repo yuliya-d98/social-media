@@ -1,49 +1,72 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import s from './sidebar.module.css';
-import clsx from 'clsx';
+import { Link } from 'react-router-dom';
 
-type FriendPropsType = {
-  name: string;
-  key: number;
-};
+import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import type { MenuProps } from 'antd';
 
-const Friend: React.FC<FriendPropsType> = (props) => {
+export const sideLink = ({ link, label }: SidebarChildItemType) => {
   return (
-    <div className={s.friend}>
-      <div className={s.friendImage}></div>
-      <p className={s.friendName}>{props.name}</p>
-    </div>
-  );
+    <Link to={link} key={label}>
+      {label}
+    </Link>
+  ) as unknown as string;
 };
 
-const friendsData = ['Andrew', 'Sasha', 'Sveta', 'Sveta', 'Sveta', 'Sveta'];
-
-type SideLinkPropsType = {
+type SidebarChildItemType = {
+  label: string;
   link: string;
-  name: string;
 };
 
-const SideLink: React.FC<SideLinkPropsType> = ({ link, name }) => (
-  <NavLink to={link} className={({ isActive }) => clsx(s.link, isActive && [s.active])} key={name}>
-    {name}
-  </NavLink>
-);
-
-const Sidebar = () => {
-  const friends = friendsData.map((n, i) => <Friend name={n} key={i} />);
-  return (
-    <nav className={s.sidebar}>
-      <SideLink link="/profile" name="Profile" />
-      <SideLink link="/dialogs" name="Messages" />
-      <SideLink link="/news" name="News" />
-      <SideLink link="/music" name="Music" />
-      <SideLink link="/settings" name="Settings" />
-      <SideLink link="/friends" name="Friends" />
-      <div className={s.friends}>{friends}</div>
-      <SideLink link="/users" name="All Users" />
-    </nav>
-  );
+type SidebarDataItemType = {
+  id: number;
+  icon: typeof UserOutlined;
+  label: string;
+  children: Array<SidebarChildItemType>;
 };
 
-export default Sidebar;
+const sidebarData: Array<SidebarDataItemType> = [
+  {
+    id: 0,
+    icon: UserOutlined,
+    label: 'Profile',
+    children: [
+      { label: 'My Profile', link: '/profile' },
+      { label: 'Profile Settings', link: '/profile' },
+    ],
+  },
+  {
+    id: 1,
+    icon: LaptopOutlined,
+    label: 'Dialogs',
+    children: [{ label: 'Dialogs', link: '/dialogs' }],
+  },
+  {
+    id: 2,
+    icon: NotificationOutlined,
+    label: 'Users',
+    children: [
+      { label: 'All Users', link: '/users' },
+      { label: 'Followed', link: '/users?friend=true' },
+      { label: 'Not Followed', link: '/users?friend=false' },
+    ],
+  },
+];
+
+export const sidebarItems: MenuProps['items'] = sidebarData.map((item, index) => {
+  const key = item.id.toString();
+
+  return {
+    key: `sub${key}`,
+    icon: React.createElement(item.icon),
+    label: item.label,
+
+    children: item.children.map((child, childIndex) => {
+      const subKey = index * 10 + childIndex;
+      const label = sideLink(child);
+      return {
+        key: subKey,
+        label: label,
+      };
+    }),
+  };
+});

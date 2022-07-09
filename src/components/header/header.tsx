@@ -1,33 +1,66 @@
-import React from 'react';
+import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, Menu, MenuProps, Row } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { logout } from '../../redux/auth-reducer';
+import { selectAvatar, selectIsAuth, selectLogin } from '../../redux/auth-selectors';
+import { sideLink } from '../sidebar/sidebar';
 import s from './header.module.css';
 
-type HeaderPropsType = {
-  isAuth: boolean;
-  login: string | null;
-  logout: () => Promise<void>;
-};
+const headerLinks = [
+  {
+    title: 'Users',
+    link: '/users',
+  },
+];
 
-const Header = (props: HeaderPropsType) => {
+export const headerItems: MenuProps['items'] = headerLinks.map((item) => {
+  return {
+    key: item.title,
+    label: sideLink({ link: item.link, label: item.title }),
+  };
+});
+
+const AppHeader = () => {
+  const isAuth = useSelector(selectIsAuth);
+  const login = useSelector(selectLogin);
+  const photo = useSelector(selectAvatar);
+  const dispatch = useDispatch();
   return (
-    <header className={s.header}>
-      <h1>Social Network</h1>
-      <div className={s.loginBlock}>
-        {props.isAuth ? (
-          <div>
-            <p className={s.login}>{props.login}</p>
-            <button className={s.button} onClick={props.logout}>
-              Log out
-            </button>
-          </div>
+    <>
+      {/* <div className="logo" /> */}
+      <Row justify="space-between">
+        <Col span={18}>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={headerItems} />
+        </Col>
+
+        {isAuth ? (
+          <>
+            <Col span={2}>
+              <Avatar
+                alt={login || 'avatar'}
+                style={{ backgroundColor: '#87d068' }}
+                src={photo}
+                icon={<UserOutlined />}
+              />
+            </Col>
+            <Col span={2}>
+              <p className={s.login}>{login}</p>
+            </Col>
+            <Col span={2}>
+              <Button onClick={dispatch(logout)}>Log out</Button>
+            </Col>
+          </>
         ) : (
-          <NavLink to={'/login'} className={s.button}>
-            Login
-          </NavLink>
+          <Col span={6}>
+            <NavLink to={'/login'} className={s.button}>
+              Login
+            </NavLink>
+          </Col>
         )}
-      </div>
-    </header>
+      </Row>
+    </>
   );
 };
 
-export default Header;
+export default AppHeader;

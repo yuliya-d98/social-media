@@ -3,17 +3,19 @@ import { connect, Provider } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // for deploy
 // import { HashRouter, Route, Routes } from "react-router-dom";
+import 'antd/dist/antd.css';
 import './App.css';
 import { initializeApp } from './redux/app-reducer';
 import store, { AppStateType } from './redux/redux-store';
+import AppHeader from './components/header/header';
 
 import Preloader from './components/common/preloader';
-import HeaderContainer from './components/header/header-container';
-import Music from './components/main/music/music';
-import News from './components/main/news/news';
-import Settings from './components/main/settings/settings';
-import Sidebar from './components/sidebar/sidebar';
 import { LoginPage } from './components/main/login/login';
+import { sidebarItems } from './components/sidebar/sidebar';
+
+import { Breadcrumb, Layout, Menu } from 'antd';
+
+const { Header, Content, Footer, Sider } = Layout;
 
 const ProfileContainer = React.lazy(() => import('./components/main/profile/profileContainer'));
 const DialogsContainer = React.lazy(() => import('./components/main/dialogs/dialogsContainer'));
@@ -47,28 +49,46 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     return (
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         {/* <HashRouter basename="/"> */}
-        <div className="container">
-          <HeaderContainer />
-          <Sidebar />
-          <div className="content-container">
-            <Suspense fallback={<Preloader />}>
-              <Routes>
-                <Route path="/" element={<Navigate to="/profile" replace />} />
-                {/* <Route path="/" element={<Navigate to="/profile" replace />} /> */}
-                <Route path="/profile" element={<ProfileContainer />}>
-                  <Route path=":userId" element={<ProfileContainer />} />
-                </Route>
-                <Route path="/dialogs/*" element={<DialogsContainer />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/music" element={<Music />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/users" element={<UsersPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="*" element={<div>404 NOT FOUND</div>} />
-              </Routes>
-            </Suspense>
-          </div>
-        </div>
+        <Layout>
+          <Header className="header">
+            <AppHeader />
+          </Header>
+          <Content style={{ padding: '0 50px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>List</Breadcrumb.Item>
+              <Breadcrumb.Item>App</Breadcrumb.Item>
+            </Breadcrumb>
+            <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
+              <Sider className="site-layout-background" width={200}>
+                <Menu
+                  mode="inline"
+                  defaultSelectedKeys={['0']}
+                  defaultOpenKeys={['sub0']}
+                  style={{ height: '100%' }}
+                  items={sidebarItems}
+                />
+              </Sider>
+              <Content style={{ padding: '0 24px', minHeight: 280 }}>
+                <Suspense fallback={<Preloader />}>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/profile" replace />} />
+                    <Route path="/profile" element={<ProfileContainer />}>
+                      <Route path=":userId" element={<ProfileContainer />} />
+                    </Route>
+                    <Route path="/dialogs/*" element={<DialogsContainer />} />
+                    <Route path="/users" element={<UsersPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="*" element={<div>404 NOT FOUND</div>} />
+                  </Routes>
+                </Suspense>
+              </Content>
+            </Layout>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            Samurai Social Network ©2022 Created by <a href="https://github.com/yuliya-d98/">me</a>
+          </Footer>
+        </Layout>
       </BrowserRouter>
       // </HashRouter>
     );
