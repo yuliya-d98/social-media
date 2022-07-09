@@ -1,11 +1,13 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Menu, MenuProps, Row } from 'antd';
+import { Avatar, Button, Col, Menu, MenuProps, Row, Layout } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { logout } from '../../redux/auth-reducer';
 import { selectAvatar, selectIsAuth, selectLogin } from '../../redux/auth-selectors';
 import { sideLink } from '../sidebar/sidebar';
 import s from './header.module.css';
+
+const { Header } = Layout;
 
 const headerLinks = [
   {
@@ -27,8 +29,7 @@ const AppHeader = () => {
   const photo = useSelector(selectAvatar);
   const dispatch = useDispatch();
   return (
-    <>
-      {/* <div className="logo" /> */}
+    <Header className="header">
       <Row justify="space-between">
         <Col span={18}>
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={headerItems} />
@@ -59,7 +60,7 @@ const AppHeader = () => {
           </Col>
         )}
       </Row>
-    </>
+    </Header>
   );
 };
 

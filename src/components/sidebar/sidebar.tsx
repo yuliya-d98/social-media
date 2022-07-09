@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { MenuProps, Menu, Layout } from 'antd';
+
+const { Sider } = Layout;
 
 export const sideLink = ({ link, label }: SidebarChildItemType) => {
   return (
@@ -38,7 +40,10 @@ const sidebarData: Array<SidebarDataItemType> = [
     id: 1,
     icon: LaptopOutlined,
     label: 'Dialogs',
-    children: [{ label: 'Dialogs', link: '/dialogs' }],
+    children: [
+      { label: 'Dialogs', link: '/dialogs' },
+      { label: 'Chat', link: '/chat' },
+    ],
   },
   {
     id: 2,
@@ -52,7 +57,7 @@ const sidebarData: Array<SidebarDataItemType> = [
   },
 ];
 
-export const sidebarItems: MenuProps['items'] = sidebarData.map((item, index) => {
+const sidebarItems: MenuProps['items'] = sidebarData.map((item, index) => {
   const key = item.id.toString();
 
   return {
@@ -70,3 +75,17 @@ export const sidebarItems: MenuProps['items'] = sidebarData.map((item, index) =>
     }),
   };
 });
+
+export const Sidebar: React.FC = () => {
+  return (
+    <Sider className="site-layout-background" width={200}>
+      <Menu
+        mode="inline"
+        defaultSelectedKeys={['0']}
+        defaultOpenKeys={['sub0']}
+        style={{ height: '100%' }}
+        items={sidebarItems}
+      />
+    </Sider>
+  );
+};

@@ -5,21 +5,22 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 // import { HashRouter, Route, Routes } from "react-router-dom";
 import 'antd/dist/antd.css';
 import './App.css';
+import AppHeader from './components/header/header';
 import { initializeApp } from './redux/app-reducer';
 import store, { AppStateType } from './redux/redux-store';
-import AppHeader from './components/header/header';
 
 import Preloader from './components/common/preloader';
 import { LoginPage } from './components/main/login/login';
-import { sidebarItems } from './components/sidebar/sidebar';
+import { Sidebar } from './components/sidebar/sidebar';
 
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Breadcrumb, Layout } from 'antd';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 const ProfileContainer = React.lazy(() => import('./components/main/profile/profileContainer'));
 const DialogsContainer = React.lazy(() => import('./components/main/dialogs/dialogsContainer'));
 const UsersPage = React.lazy(() => import('./components/main/users/usersContainer'));
+const ChatPage = React.lazy(() => import('./pages/chat/chat-page'));
 
 type MapPropsType = ReturnType<typeof mapStateToProps>;
 type DispatchPropsType = {
@@ -50,9 +51,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         {/* <HashRouter basename="/"> */}
         <Layout>
-          <Header className="header">
-            <AppHeader />
-          </Header>
+          <AppHeader />
           <Content style={{ padding: '0 50px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
@@ -60,15 +59,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
               <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb>
             <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
-              <Sider className="site-layout-background" width={200}>
-                <Menu
-                  mode="inline"
-                  defaultSelectedKeys={['0']}
-                  defaultOpenKeys={['sub0']}
-                  style={{ height: '100%' }}
-                  items={sidebarItems}
-                />
-              </Sider>
+              <Sidebar />
               <Content style={{ padding: '0 24px', minHeight: 280 }}>
                 <Suspense fallback={<Preloader />}>
                   <Routes>
@@ -77,6 +68,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
                       <Route path=":userId" element={<ProfileContainer />} />
                     </Route>
                     <Route path="/dialogs/*" element={<DialogsContainer />} />
+                    <Route path="/chat" element={<ChatPage />} />
                     <Route path="/users" element={<UsersPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="*" element={<div>404 NOT FOUND</div>} />
