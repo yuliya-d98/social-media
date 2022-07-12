@@ -7,6 +7,7 @@ import usersReducer from './users-reducer';
 import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 import { reducer as formReducer } from 'redux-form';
 import appReducer from './app-reducer';
+import chatReducer from './chat-reducer';
 
 //@ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -19,11 +20,11 @@ const rootReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
   app: appReducer,
+  chat: chatReducer,
 });
 
 type RootReducerType = typeof rootReducer;
 export type AppStateType = ReturnType<RootReducerType>;
-// type GetStateType = () => AppStateType;
 export type BaseThunkType<A extends Action = Action, R = Promise<void>> = ThunkAction<
   R,
   AppStateType,
