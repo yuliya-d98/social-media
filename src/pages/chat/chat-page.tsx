@@ -1,14 +1,15 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Input, Form, Avatar } from 'antd';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ChatMessageType } from '../../api/chat-api';
+import { ChatMessageAPIType } from '../../api/chat-api';
 import {
   sendMessage,
   startMessagesListening,
   stopMessagesListening,
 } from '../../redux/chat-reducer';
-import { selectMessages } from '../../redux/chat-selectors';
+import { selectMessages, selectStatus } from '../../redux/chat-selectors';
 const { TextArea } = Input;
 
 const ChatPage: React.FC = () => {
@@ -18,6 +19,7 @@ const ChatPage: React.FC = () => {
 export default ChatPage;
 
 const Chat: React.FC = () => {
+  const status = useSelector(selectStatus);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(startMessagesListening());
@@ -25,30 +27,10 @@ const Chat: React.FC = () => {
       dispatch(stopMessagesListening());
     };
   }, []);
-  // const [wsChannel, setWsChannel] = useState<WebSocket | null>(null);
-  // useEffect(() => {
-  //   let ws: WebSocket;
-  //   const closeHandler = () => {
-  //     console.log('close wsChannel');
-  //     setTimeout(createChannel, 3000);
-  //   };
-  //   const createChannel = () => {
-  //     ws?.removeEventListener('close', closeHandler);
-  //     ws?.close();
-  //     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
-  //     ws.addEventListener('close', closeHandler);
-  //     setWsChannel(ws);
-  //   };
-  //   createChannel();
-
-  //   return () => {
-  //     ws.removeEventListener('close', closeHandler);
-  //     ws.close();
-  //   };
-  // }, []);
 
   return (
     <>
+      {status === 'error' && <p>Some error occured, please refresh page</p>}
       <Messages />
       <AddMessageForm />
     </>
@@ -56,28 +38,43 @@ const Chat: React.FC = () => {
 };
 
 const Messages: React.FC = () => {
-  // const [messagesData, setMessagesData] = useState<ChatMessageType[]>([]);
   const messagesData = useSelector(selectMessages);
-  // useEffect(() => {
-  //   const messageHandler = (e: MessageEvent) => {
-  //     const newMessageData = JSON.parse(e.data);
-  //     setMessagesData((prevMessageData) => [...prevMessageData, ...newMessageData]);
-  //   };
-  //   wsChannel?.addEventListener('message', messageHandler);
-  //   return () => {
-  //     wsChannel?.removeEventListener('message', messageHandler);
-  //   };
-  // }, [wsChannel]);
+  const [isAutoScroll, setIsAutoScroll] = useState(false);
+
+  const messageAnchorRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (isAutoScroll) {
+      //   window.scrollTo({
+      //     top: container.scrollHeight,
+      //     behavior: "smooth"
+      // })
+      // Если добавить новый экшн по зачистке стэйта и диспатчить его  в stopMessagesListening, то все работает хорошо и скролл в том числе.
+      messageAnchorRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+      // messageAnchorRef.current?.scrollIntoView(true);
+      // messageAnchorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messagesData]);
+
+  const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const element = e.currentTarget;
+    if (Math.abs(element.scrollHeight - element.scrollTop - element.clientHeight) < 300) {
+      !isAutoScroll && setIsAutoScroll(true);
+    } else {
+      isAutoScroll && setIsAutoScroll(false);
+    }
+  };
+
   return (
-    <div style={{ height: 'calc(100vh - 300px)', overflowY: 'auto' }}>
-      {messagesData.map((m, i) => (
-        <Message {...m} key={i} />
+    <div style={{ height: 'calc(100vh - 300px)', overflowY: 'auto' }} onScroll={scrollHandler}>
+      {messagesData.map((m) => (
+        <Message {...m} key={m.id} />
       ))}
+      <div ref={messageAnchorRef}></div>
     </div>
   );
 };
 
-const Message: React.FC<ChatMessageType> = (props) => {
+const Message: React.FC<ChatMessageAPIType> = React.memo((props) => {
   return (
     <div>
       <Avatar style={{ backgroundColor: '#87d068' }} src={props.photo} icon={<UserOutlined />} />
@@ -86,12 +83,14 @@ const Message: React.FC<ChatMessageType> = (props) => {
       <hr />
     </div>
   );
-};
+});
 
 const AddMessageForm: React.FC = () => {
   const [message, setMessage] = useState('');
-  // const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending');
+  const status = useSelector(selectStatus);
+
   const dispatch = useDispatch();
+
   const onSendMessage = () => {
     if (!message) {
       return;
@@ -100,20 +99,10 @@ const AddMessageForm: React.FC = () => {
     setMessage('');
   };
 
-  // useEffect(() => {
-  //   const openHandler = () => {
-  //     setReadyStatus('ready');
-  //   };
-  //   wsChannel?.addEventListener('open', openHandler);
-  //   return () => {
-  //     wsChannel?.removeEventListener('open', openHandler);
-  //   };
-  // }, [wsChannel]);
-
   return (
     <Form>
       <TextArea rows={4} onChange={(e) => setMessage(e.currentTarget.value)} value={message} />
-      <Button onClick={onSendMessage} disabled={false}>
+      <Button onClick={onSendMessage} disabled={status !== 'ready'}>
         Send
       </Button>
     </Form>
